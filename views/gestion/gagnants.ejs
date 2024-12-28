@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Los Santos Custom</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="icon" href="/img/logo-lsc.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="/gestion/home"
+                >Employés</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="/gestion/contrats"
+                >Contrats</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="/gestion/gagnants"
+                >Gagnants</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/logs">Logs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/users">Utilisateurs</a>
+            </li>
+          </ul>
+          <div class="d-flex">
+            <button class="btn btn-primary" onclick="window.location.href='/'">
+              Retour
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5 text-center">
+      <h2>Gagnants - <%= gagnants.length %></h2>
+      <input
+        type="text"
+        class="form-control mt-5"
+        id="search-bar"
+        placeholder="Nom du gagnant"
+      />
+      <div class="table-responsive mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Nom & Prénom</th>
+              <th scope="col">Montant</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            <tr class="editing">
+              <form id="addRowForm">
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="name"
+                    placeholder="Nom du gagnant"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="montant"
+                    placeholder="Nombre de réparation"
+                  />
+                </td>
+                <td>
+                  <button type="submit" class="btn btn-primary">
+                    Enregistrer
+                  </button>
+                </td>
+              </form>
+            </tr>
+            <% gagnants.forEach(function(c) { %> <% if (!c)
+            return; %>
+            <tr class="align-middle" data-id="<%= c._id %>">
+              <td><%= c.name %></td>
+              <td><%= c.nombre %></td>
+              <td>
+                <button id="btn-del" class="btn btn-danger btn-floating">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+
+  <script src="/js/bootstrap.js"></script>
+  <script src="/js/gagnant.js"></script>
+</html>

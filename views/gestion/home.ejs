@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Los Santos Custom</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="icon" href="/img/logo-lsc.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="/gestion/home"
+                >Employés</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/contrats">Contrats</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/gagnants">Gagnants</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/logs">Logs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/users">Utilisateurs</a>
+            </li>
+          </ul>
+          <div class="d-flex">
+            <button class="btn btn-primary" onclick="window.location.href='/'">
+              Retour
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5 text-center">
+      <h2>Employés - <%= employees.length %></h2>
+      <button type="button" class="btn btn-danger mt-3" id="delFacture">
+        Effacer les factures
+      </button>
+      <input
+        type="text"
+        class="form-control mt-3"
+        id="search-bar"
+        placeholder="Prénom de l'employé"
+      />
+      <div class="table-responsive mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Employé</th>
+              <th scope="col">Grade</th>
+              <th scope="col">Chiffre d'Affaire</th>
+              <th scope="col">Chiffre Entreprise</th>
+              <th scope="col">Prime</th>
+              <th scope="col">Téléphone</th>
+              <th scope="col">RIB</th>
+              <th scope="col">Date d'Arriver</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            <tr class="editing">
+              <form id="addRowForm">
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="name"
+                    placeholder="Prénom & Nom"
+                  />
+                </td>
+                <td>
+                  <select
+                    class="form-select"
+                    aria-label="Choisir le grade"
+                    name="grade"
+                  >
+                    <option selected value="Apprenti">Apprenti</option>
+                    <option value="Mécanicien">Mécanicien</option>
+                    <option value="Expérimenté I">Expérimenté I</option>
+                    <option value="Expérimenté II">Expérimenté II</option>
+                    <option value="Expérimenté III">Expérimenté III</option>
+                    <option value="Sécurité">Sécurité</option>
+                    <option value="Secrétaire">Secrétaire</option>
+                    <option value="Manageur">Manageur</option>
+                    <option value="DRH">DRH</option>
+                    <option value="Co-Patron">Co-Patron</option>
+                    <option value="Patron">Patron</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="revenue"
+                    value="$0"
+                    disabled
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="companyRevenue"
+                    value="$0"
+                    disabled
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="bonus"
+                    value="$0"
+                    disabled
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="phone"
+                    placeholder="Téléphone"
+                    value="555-"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="rib"
+                    placeholder="RIB"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control datepicker_input"
+                    name="date"
+                    id="date"
+                    value="<%= new Date().getDate() %>/<%= new Date().getMonth() + 1 %>/<%= new Date().getFullYear() %>"
+                    disabled
+                  />
+                </td>
+                <td>
+                  <button type="submit" class="btn btn-primary">
+                    Enregistrer
+                  </button>
+                </td>
+              </form>
+            </tr>
+            <% employees.forEach(function(e) { %>
+            <tr data-id="<%= e._id %>" class="align-middle">
+              <td><%= e.name %></td>
+              <td><%= e.grade %></td>
+              <td><%= e.ca %></td>
+              <td><%= e.cae %></td>
+              <td><%= e.prime %></td>
+              <td><%= e.phone %></td>
+              <td><%= e.rib %></td>
+              <td><%= e.date %></td>
+              <td>
+                <button id="btn-del" class="btn btn-danger btn-floating" data-id="<%= e._id %>">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+
+  <script src="/js/bootstrap.js"></script>
+  <script src="/js/g-main.js"></script>
+</html>

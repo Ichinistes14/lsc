@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Los Santos Custom</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="icon" href="/img/logo-lsc.ico" type="image/x-icon" />
+  </head>
+  <body
+    data-bs-theme="dark"
+    class="d-flex justify-content-center align-items-center vh-100"
+  >
+    <div class="container w-50 text-center">
+      <h2>Connexion</h2>
+      <hr class="hr hr-blurry my-5 table-group-divider" />
+      <form id="loginForm" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="id" class="form-label">Identifiant</label>
+          <input type="text" class="form-control" id="id" required />
+          <div class="invalid-feedback">
+            Vous devez mettre votre identifiant pour vous connecter
+          </div>
+        </div>
+        <div id="loginAlert" class="mb-3"></div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary">Se connecter</button>
+        </div>
+      </form>
+    </div>
+  </body>
+
+  <script src="/js/bootstrap.js"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const alertPlaceholder = document.getElementById("loginAlert");
+      const appendAlert = (message, type) => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = [
+          `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+          `   <div>${message}</div>`,
+          '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+          "</div>",
+        ].join("");
+
+        alertPlaceholder.append(wrapper);
+      };
+
+      const forms = document.querySelectorAll(".needs-validation");
+
+      Array.from(forms).forEach((form) => {
+        form.addEventListener(
+          "submit",
+          (event) => {
+            event.preventDefault();
+
+            if (!form.checkValidity()) {
+              event.stopPropagation();
+            }
+
+            form.classList.add("was-validated");
+
+            if (form.checkValidity()) {
+              const id = document.getElementById("id").value;
+
+              const data = { id: id };
+
+              fetch("/api/login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.success) {
+                    document.getElementById("loginForm").reset();
+                    window.location.href = "/";
+                  } else {
+                    appendAlert("Identifiant invalide", "danger");
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                  appendAlert(
+                    "Une erreur est survenue lors de la connexion. Merci de réessayer plus tard.",
+                    "danger"
+                  );
+                });
+            }
+          },
+          false
+        );
+      });
+    })();
+  </script>
+</html>

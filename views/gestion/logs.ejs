@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Los Santos Custom</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="icon" href="/img/logo-lsc.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/home">Employés</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/contrats">Contrats</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/gagnants">Gagnants</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="/gestion/logs"
+                >Logs</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/users">Utilisateurs</a>
+            </li>
+          </ul>
+          <div class="d-flex">
+            <button class="btn btn-primary" onclick="window.location.href='/'">
+              Retour
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5 text-center">
+      <h2>Logs</h2>
+      <input
+        type="text"
+        class="form-control mt-5"
+        id="search-bar"
+        placeholder="Chercher par utilisateur, action ou date"
+      />
+      <div class="table-responsive mt-4">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Utilisateur</th>
+              <th scope="col">Action</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            <% logs.forEach(function(l) { %> <% if (admin) { %>
+            <tr class="align-middle">
+              <td><%= l.admin %></td>
+              <td><%= l.action %></td>
+              <td><%= new Date(l.timestamp).toLocaleString() %></td>
+            </tr>
+            <% } else { %>
+            <tr class="align-middle">
+              <td><%= l.admin.replace(/_.*/, '') %></td>
+              <td><%= l.action %></td>
+              <td><%= new Date(l.timestamp).toLocaleString() %></td>
+            </tr>
+            <% } %> <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+
+  <script src="/js/bootstrap.js"></script>
+  <script src="/js/logs.js"></script>
+</html>

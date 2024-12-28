@@ -1,0 +1,17 @@
+.align-middle {
+  vertical-align: middle;
+}
+
+.btn-floating {
+  --mdb-btn-width: 2.3125rem;
+  --mdb-btn-height: 2.3125rem;
+  width: var(--mdb-btn-width);
+  height: var(--mdb-btn-height);
+  --mdb-btn-border-radius: 50%;
+  border-radius: var(--mdb-btn-border-radius);
+  padding: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

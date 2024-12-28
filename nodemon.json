@@ -1,0 +1,3 @@
+{
+    "ignore": ["view/**/*.ejs","public/**/*.css","public/**/*.js"]
+}

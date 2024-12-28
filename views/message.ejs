@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Los Santos Custom</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="icon" href="/img/logo-lsc.ico" type="image/x-icon" />
+  </head>
+  <body data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/stats">Statistique</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/employe">Employé</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/facture">Facture</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/tombola">Tombola</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/message"
+                >Message</a
+              >
+            </li>
+          </ul>
+          <% if (isa) { %>
+          <div class="d-flex">
+            <button id="gestionB" class="btn btn-primary">Gestion</button>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5 text-center">
+      <h2>Prévisualisation de message</h2>
+      <div class="form-floating mt-4 mb-4">
+        <textarea
+          class="form-control"
+          placeholder="Écrivez votre message"
+          id="messageContent"
+          style="height: 100px; overflow: hidden; resize: none"
+        ></textarea>
+        <label for="messageContent">Écrivez votre message</label>
+        <i
+          class="resize-icon"
+          style="
+            position: absolute;
+            bottom: 5px;
+            right: 7.5px;
+            cursor: ns-resize;
+            font-size: 18px;
+          "
+          title="Redimensionner"
+          >↘</i
+        >
+      </div>
+      <button type="button" class="btn btn-primary" id="copyMessage">
+        Copier le texte
+      </button>
+      <button type="button" class="btn btn-primary" id="primeExemple">
+        Prime
+      </button>
+      <button type="button" class="btn btn-danger" id="clear">Effacer</button>
+      <div id="previewMessage" class="mt-4 text-start"></div>
+    </div>
+  </body>
+
+  <script src="/js/bootstrap.js"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"
+  ></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/message.js"></script>
+</html>

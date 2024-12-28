@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Los Santos Custom</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="icon" href="/img/logo-lsc.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/stats">Statistique</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/employe">Employé</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/facture">Facture</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/tombola"
+                >Tombola</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/message">Message</a>
+            </li>
+          </ul>
+          <% if (isa) { %>
+          <div class="d-flex">
+            <button id="gestionB" class="btn btn-primary">Gestion</button>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5 text-center">
+      <h2>Tombola</h2>
+      <h4>Prix - <span>$250</span></h4>
+      <input
+        type="text"
+        class="form-control mt-4"
+        id="search-bar"
+        placeholder="Prénom du participant"
+      />
+      <div class="table-responsive mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Employé</th>
+              <th scope="col">Nom & Prénom</th>
+              <th scope="col">Nombre de ticket</th>
+              <th scope="col">Téléphone</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider align-middle">
+            <tr class="editing">
+              <form id="addRowForm">
+                <td>
+                  <select
+                    class="form-select"
+                    id="employe"
+                    aria-label="Choisir un employé"
+                  >
+                    <option value="" selected>Choisir un employé</option>
+                    <% employees.forEach((g) => { %>
+                    <option value="<%= g.name %>"><%= g.name %></option>
+                    <% }) %>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    placeholder="Nom & Prénom"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="nombre"
+                    placeholder="Nombre de ticket"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="phone"
+                    placeholder="Téléphone"
+                    value="555-"
+                  />
+                </td>
+                <td>
+                  <button id="btn-add" class="btn btn-primary">
+                    Enregistrer
+                  </button>
+                </td>
+              </form>
+            </tr>
+            <% let reversedTombola = tombolas.reverse(); %> <%
+            reversedTombola.forEach(function(t, index) { %>
+            <tr data-id="<%= t._id %>">
+              <td><%= t.employe %></td>
+              <td><%= t.name %></td>
+              <td><%= t.nombre %></td>
+              <td><%= t.phone %></td>
+              <td>
+                <button
+                  id="btn-del"
+                  class="btn btn-danger btn-floating"
+                  data-id="<%= t._id %>"
+                >
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+
+  <script src="/js/bootstrap.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/tombola.js"></script>
+
+  <script>
+    function makeEditable(row) {
+      if (row.classList.contains("editing")) {
+        return;
+      }
+
+      row.classList.add("editing");
+
+      const cells = row.querySelectorAll("td");
+      const id = row.getAttribute("data-id");
+
+      const _1 = cells[0].textContent;
+      const _2 = cells[1].textContent;
+      const _3 = cells[2].textContent;
+      const _4 = cells[3].textContent;
+
+      cells[0].innerHTML = `<select
+                    class="form-select"
+                    id="employee"
+                    aria-label="Choisir un employé"
+                  >
+                    <option value="" selected>Choisir un employé</option>
+                    <% employees.forEach((g) => { %>
+                    <option value="<%= g.name %>"><%= g.name %></option>
+                    <% }) %>
+                  </select>`;
+      cells[1].innerHTML = `<input type="text" class="form-control" value="${_2}" />`;
+      cells[2].innerHTML = `<input type="text" class="form-control" value="${_3}" />`;
+      cells[3].innerHTML = `<input type="text" class="form-control" value="${_4}" />`;
+      cells[4].innerHTML = `<button class="btn btn-primary btn-floating btn-save"><i class="fa-solid fa-floppy-disk"></i></button>`;
+
+      cells[0].querySelector("select").value = _1;
+
+      row.querySelector(".btn-save").addEventListener("click", function () {
+        row.classList.remove("editing");
+        const _1 = cells[0].querySelector("select").value;
+        const _2 = cells[1].querySelector("input").value;
+        const _3 = cells[2].querySelector("input").value;
+        const _4 = cells[3].querySelector("input").value;
+
+        const data = {
+          id: id,
+          employe: _1,
+          name: _2,
+          nombre: _3,
+          phone: _4,
+        };
+
+        fetch("/modify-tombola", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              cells[0].textContent = _1;
+              cells[1].textContent = _2;
+              cells[2].textContent = _3;
+              cells[3].textContent = _4;
+              cells[4].innerHTML = `<button id="btn-del" class="btn btn-danger btn-floating" data-id="${id}"><i class="fa-solid fa-xmark"></i></button>`;
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
+    }
+  </script>
+</html>

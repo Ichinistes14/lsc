@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Los Santos Custom</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="icon" href="/img/logo-lsc.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/"
+                >Accueil</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/stats"
+                >Statistique</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/employe">Employé</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/facture">Facture</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/tombola">Tombola</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/message">Message</a>
+            </li>
+          </ul>
+          <% if (isa) { %>
+          <div class="d-flex">
+            <button id="gestionB" class="btn btn-primary">Gestion</button>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5 text-center">
+      <h2>Statistique LSC</h2>
+      <hr class="hr hr-blurry mt-5 table-group-divider" />
+      <% if (isa) { %>
+      <div class="mt-1 mb-2 d-flex align-items-center justify-content-center">
+        <input
+          type="text"
+          class="form-control"
+          style="width: 35% !important; text-align: center;"
+          id="add-stat"
+          placeholder="Nouveau montant en banque"
+        />
+        <button id="btn-stat" class="btn btn-primary btn-floating ms-2"><i class="fa-solid fa-plus"></i></button>
+      </div>
+      <% } %>
+      <div>
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
+  </body>
+
+  <script src="/js/bootstrap.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const btn = document.getElementById("btn-stat");
+
+    if (btn) {
+      btn.addEventListener("click", async () => {
+        const value = document.getElementById("add-stat").value;
+        const response = await fetch("/api/stats", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ value }),
+        });
+
+        if (response.ok) {
+          window.location.reload();
+        }
+      });
+    }
+  </script>
+  <script>
+      const ctx = document.getElementById("myChart");
+      const historyData = <%- JSON.stringify(data) %>;
+      const skipped = (ctx, value) =>
+    ctx.p0.skip || ctx.p1.skip ? value : undefined;
+      const down = (ctx, value) =>
+    ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
+
+      const labels = historyData.map((entry) => entry.label);
+      const data = historyData.map((entry) => entry.value);
+
+      const genericOptions = {
+        fill: false,
+        interaction: {
+          intersect: false,
+        },
+        radius: 2.5,
+        plugins: {
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            enabled: false,
+            external: function (context) {
+              let tooltipEl = document.getElementById("chartjs-tooltip");
+
+              if (!tooltipEl) {
+                tooltipEl = document.createElement("div");
+                tooltipEl.id = "chartjs-tooltip";
+                tooltipEl.style.background = "rgba(0, 0, 0, 0.8)";
+                tooltipEl.style.borderRadius = "4px";
+                tooltipEl.style.color = "white";
+                tooltipEl.style.opacity = 1;
+                tooltipEl.style.pointerEvents = "none";
+                tooltipEl.style.position = "absolute";
+                tooltipEl.style.transform = "translate(-50%, 0)";
+                tooltipEl.style.transition = "all 0.1s ease";
+                document.body.appendChild(tooltipEl);
+              }
+
+              const tooltipModel = context.tooltip;
+              if (tooltipModel.opacity === 0) {
+                tooltipEl.style.opacity = 0;
+                return;
+              }
+
+              if (tooltipModel.body) {
+                const body = tooltipModel.body[0].lines[0];
+                const datasetIndex = tooltipModel.dataPoints[0].datasetIndex;
+                const dataIndex = tooltipModel.dataPoints[0].dataIndex;
+                const dataset = context.chart.data.datasets[datasetIndex];
+
+                const value = dataset.data[dataIndex];
+                const previousValue =
+                  dataIndex > 0 ? dataset.data[dataIndex - 1] : null;
+
+                let html = `<div style="font-size:12px; padding:4px 8px;">`;
+                html += `<strong>$${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}</strong>`;
+
+                if (previousValue !== null) {
+                  const diff = value - previousValue;
+                  const percentChange = ((diff / previousValue) * 100).toFixed(2);
+                  const color = percentChange > 0 ? "#4bc0c0" : "rgb(192,75,75)";
+
+                  html += ` <span style="color:${color}">(${
+                    percentChange > 0 ? "+" : ""
+                  }${percentChange}%)</span>`;
+                }
+
+                html += `</div>`;
+                tooltipEl.innerHTML = html;
+              }
+
+              const position = context.chart.canvas.getBoundingClientRect();
+              tooltipEl.style.opacity = 1;
+              tooltipEl.style.left =
+                position.left + window.pageXOffset + tooltipModel.caretX + "px";
+              tooltipEl.style.top =
+                position.top + window.pageYOffset + tooltipModel.caretY + "px";
+            },
+          },
+        },
+        locale: "fr",
+        responsive: true,
+      };
+
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            {
+              data,
+              borderColor: "rgb(75, 192, 192)",
+              segment: {
+                borderColor: (ctx) =>
+                  skipped(ctx, "rgb(0,0,0,0.2)") || down(ctx, "rgb(192,75,75)"),
+                borderDash: (ctx) => skipped(ctx, [6, 6]),
+              },
+              spanGaps: true,
+            },
+          ],
+        },
+        options: genericOptions,
+      });
+  </script>
+</html>
