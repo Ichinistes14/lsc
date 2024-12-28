@@ -35,7 +35,7 @@ const app = express();
 
 mongoose.connect("mongodb://jonathan_devlin_ichiniste14:Python44**$$**@mongo.db.mdbgo.com:8604/jonathan_devlin_root");
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(
   "/",
   express.static(path.join(__dirname, "node_modules/bootstrap/dist/"))
