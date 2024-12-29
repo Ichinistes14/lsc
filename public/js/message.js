@@ -52,11 +52,11 @@ $(document).ready(function () {
     const grades = [
       "Apprenti",
       "Mécanicien",
-      "Expérimenté",
+      "Expérimenté I",
+      "Expérimenté II",
+      "Expérimenté III",
       "Sécurité",
-      "Chef Sécurité",
-      "Chef d'Atelier",
-      "Chef SP",
+      "Manageur",
     ];
 
     for (const grade of grades) {
