@@ -291,6 +291,6 @@ db.once("open", async () => {
         server.address().port
       }`
     );
-    refreshGrades();
+    await refreshGrades();
   });
 });
