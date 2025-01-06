@@ -8,6 +8,8 @@ const bodyParser = require("body-parser");
 const crypto = require("crypto-js");
 
 const {
+  refreshGrades,
+  getGrades,
   generateMetrics,
   addFacture,
   modifyFacture,
@@ -189,8 +191,10 @@ app.get("/tombola", checkConnetion, async (req, res) => {
   res.render("tombola", { tombolas, employees, isa: isAdmin(req) });
 });
 
-app.get("/message", checkConnetion, (req, res) => {
-  res.render("message", { isa: isAdmin(req) });
+app.get("/message", checkConnetion, async (req, res) => {
+  const grades = await getGrades();
+
+  res.render("message", { grades, isa: isAdmin(req) });
 });
 
 /* POST */
@@ -287,5 +291,6 @@ db.once("open", async () => {
         server.address().port
       }`
     );
+    refreshGrades();
   });
 });

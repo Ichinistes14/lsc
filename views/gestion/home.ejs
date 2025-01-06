@@ -47,6 +47,9 @@
               <a class="nav-link" href="/gestion/gagnants">Gagnants</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="/gestion/grades">Grades</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="/gestion/logs">Logs</a>
             </li>
             <li class="nav-item">
@@ -105,17 +108,12 @@
                     aria-label="Choisir le grade"
                     name="grade"
                   >
-                    <option selected value="Apprenti">Apprenti</option>
-                    <option value="Mécanicien">Mécanicien</option>
-                    <option value="Expérimenté I">Expérimenté I</option>
-                    <option value="Expérimenté II">Expérimenté II</option>
-                    <option value="Expérimenté III">Expérimenté III</option>
-                    <option value="Sécurité">Sécurité</option>
-                    <option value="Secrétaire">Secrétaire</option>
-                    <option value="Manageur">Manageur</option>
-                    <option value="DRH">DRH</option>
-                    <option value="Co-Patron">Co-Patron</option>
-                    <option value="Patron">Patron</option>
+                    <% grades = grades.reverse(); grades.forEach(function(g) { %>
+                    <% if (g.name === "Apprenti") { %>
+                      <option selected value="<%= g.name %>"><%= g.name %></option>
+                    <% return; } %>
+                    <option value="<%= g.name %>"><%= g.name %></option>
+                    <% }); %>
                   </select>
                 </td>
                 <td>
@@ -202,6 +200,13 @@
     </div>
   </body>
 
+  <script>
+    var grades = [];
+
+    <% grades.forEach(function(g) { %>
+      grades.push("<%= g.name %>");
+    <% }); %>
+  </script>
   <script src="/js/bootstrap.js"></script>
   <script src="/js/g-main.js"></script>
 </html>

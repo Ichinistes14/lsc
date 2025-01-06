@@ -14,6 +14,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
   </head>
   <body data-bs-theme="dark">
     <nav class="navbar navbar-expand-xl bg-body-tertiary">
@@ -33,24 +34,36 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="/gestion/home">Employés</a>
+              <a
+                class="nav-link"
+                href="/gestion/home"
+                >Employés</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/gestion/contrats">Contrats</a>
+              <a
+                class="nav-link"
+                href="/gestion/contrats"
+                >Contrats</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/gestion/gagnants">Gagnants</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/grades">Grades</a>
+              <a
+                class="nav-link"
+                href="/gestion/gagnants"
+                >Gagnants</a
+              >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
-                href="/gestion/logs"
-                >Logs</a
+                href="/gestion/grades"
+                >Grades</a
               >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gestion/logs">Logs</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/gestion/users">Utilisateurs</a>
@@ -66,36 +79,52 @@
     </nav>
 
     <div class="container mt-5 text-center">
-      <h2>Logs</h2>
+      <h2>Grades - <%= grades.length %></h2>
       <input
         type="text"
         class="form-control mt-5"
         id="search-bar"
-        placeholder="Chercher par utilisateur, action ou date"
+        placeholder="Nom du gagnant"
       />
-      <div class="table-responsive mt-4">
+      
+      <button id="save-order" class="btn btn-primary mt-4">Sauvegarder l'ordre</button>
+      <div class="table-responsive mt-3">
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Utilisateur</th>
+              <th scope="col">Nom du grade</th>
               <th scope="col">Action</th>
-              <th scope="col">Date</th>
             </tr>
           </thead>
-          <tbody class="table-group-divider">
-            <% logs.forEach(function(l) { %> <% if (admin) { %>
-            <tr class="align-middle">
-              <td><%= l.admin %></td>
-              <td><%= l.action %></td>
-              <td><%= new Date(l.timestamp).toLocaleString() %></td>
+          <tbody id="grades-list" class="table-group-divider">
+            <tr class="editing no-sort">
+              <form id="addRowForm">
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="name"
+                    placeholder="Nom du rôle"
+                  />
+                </td>
+                <td>
+                  <button type="submit" class="btn btn-primary">
+                    Enregistrer
+                  </button>
+                </td>
+              </form>
             </tr>
-            <% } else { %>
-            <tr class="align-middle">
-              <td><%= l.admin.replace(/_.*/, '') %></td>
-              <td><%= l.action %></td>
-              <td><%= new Date(l.timestamp).toLocaleString() %></td>
+            <% grades.forEach(function(g) { %> <% if (!g)
+            return; %>
+            <tr class="align-middle" data-id="<%= g._id %>">
+              <td><%= g.name %></td>
+              <td>
+                <button id="btn-del" class="btn btn-danger btn-floating">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </td>
             </tr>
-            <% } %> <% }); %>
+            <% }); %>
           </tbody>
         </table>
       </div>
@@ -103,5 +132,5 @@
   </body>
 
   <script src="/js/bootstrap.js"></script>
-  <script src="/js/logs.js"></script>
+  <script src="/js/grades.js"></script>
 </html>

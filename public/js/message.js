@@ -49,16 +49,6 @@ $(document).ready(function () {
       },
     });
 
-    const grades = [
-      "Apprenti",
-      "Mécanicien",
-      "Expérimenté I",
-      "Expérimenté II",
-      "Expérimenté III",
-      "Sécurité",
-      "Manageur",
-    ];
-
     for (const grade of grades) {
       const employeesInGrade = data.filter((e) => e.grade === grade && e.name);
     

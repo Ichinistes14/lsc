@@ -3,9 +3,8 @@ document.getElementById("search-bar").addEventListener("input", function () {
   let rows = document.querySelectorAll("tbody tr");
 
   rows.forEach(function (row) {
-    if (row.classList.contains("editing"))
-      return;
-    
+    if (row.classList.contains("editing")) return;
+
     let employeeName = row.querySelector("td").textContent.toLowerCase();
 
     if (employeeName.includes(searchValue)) {
@@ -36,41 +35,18 @@ function makeEditable(row) {
   const _8 = cells[7].textContent;
 
   cells[0].innerHTML = `<input type="text" class="form-control" value="${_1}" />`;
-  cells[1].innerHTML = `<select class="form-select">
-    <option value="Apprenti" ${
-      _2 === "Apprenti" ? "selected" : ""
-    }>Apprenti</option>
-    <option value="Mécanicien" ${
-      _2 === "Mécanicien" ? "selected" : ""
-    }>Mécanicien</option>
-    <option value="Expérimenté I" ${
-      _2 === "Expérimenté I" ? "selected" : ""
-    }>Expérimenté I</option>
-    <option value="Expérimenté II" ${
-      _2 === "Expérimenté II" ? "selected" : ""
-    }>Expérimenté II</option>
-    <option value="Expérimenté III" ${
-      _2 === "Expérimenté III" ? "selected" : ""
-    }>Expérimenté III</option>
-    <option value="Sécurité" ${
-      _2 === "Sécurité" ? "selected" : ""
-    }>Sécurité</option>
-    <option value="Secrétaire" ${
-      _2 === "Secrétaire" ? "selected" : ""
-    }>Secrétaire</option>
-    <option value="Manageur" ${
-      _2 === "Manageur" ? "selected" : ""
-    }>Manageur</option>
-    <option value="DRH" ${
-      _2 === "DRH" ? "selected" : ""
-    }>DRH</option>
-    <option value="Co-Patron" ${
-      _2 === "Co-Patron" ? "selected" : ""
-    }>Co-Patron</option>
-    <option value="Patron" ${
-      _2 === "Patron" ? "selected" : ""
-    }>Patron</option>
-</select>`;
+
+  let selectHTML = `<select class="form-select">`;
+  
+  grades.forEach((grade) => {
+    if (grade === _2) {
+      selectHTML += `<option value="${grade}" selected>${grade}</option>`;
+    } else {
+      selectHTML += `<option value="${grade}">${grade}</option>`;
+    }
+  });
+  selectHTML += `</select>`;
+  cells[1].innerHTML = selectHTML;
   cells[2].innerHTML = `<input type="text" class="form-control" value="${_3}" disabled />`;
   cells[3].innerHTML = `<input type="text" class="form-control" value="${_4}" disabled />`;
   cells[4].innerHTML = `<input type="text" class="form-control" value="${_5}" disabled />`;
@@ -194,12 +170,12 @@ document.querySelectorAll("#btn-del").forEach((b) => {
     const id = row.getAttribute("data-id");
 
     fetch("/gestion/delete-employe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      })
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -208,7 +184,7 @@ document.querySelectorAll("#btn-del").forEach((b) => {
           console.error("Échec de la suppression :", data.message);
         }
       })
-      .catch(error => console.error("Erreur réseau :", error));
+      .catch((error) => console.error("Erreur réseau :", error));
   });
 });
 
@@ -216,12 +192,12 @@ const delFacture = document.getElementById("delFacture");
 if (delFacture) {
   delFacture.addEventListener("click", (e) => {
     fetch("/gestion/delete-facture", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ row: -1 }),
-      })
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ row: -1 }),
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -230,6 +206,6 @@ if (delFacture) {
           console.error("Échec de la suppression :", data.message);
         }
       })
-      .catch(error => console.error("Erreur réseau :", error));
+      .catch((error) => console.error("Erreur réseau :", error));
   });
 }
