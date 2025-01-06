@@ -134,8 +134,6 @@ app.get("/employe", checkConnetion, async (req, res) => {
     const contrats = await getContrats();
     const gagnants = await getGagnants();
 
-    console.log(sheetData);
-
     res.render("employe", {
       employees: sheetData,
       contrats,
