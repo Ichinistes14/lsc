@@ -149,6 +149,8 @@ app.get("/employe", checkConnetion, async (req, res) => {
 app.get("/facture", checkConnetion, async (req, res) => {
   try {
     const sheetData = await getFactures();
+    const contrats = await getContrats();
+    const gagnants = await getGagnants();
 
     sheetData.forEach((t) => {
       t.montant = `$${t.montant.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}`
@@ -157,6 +159,8 @@ app.get("/facture", checkConnetion, async (req, res) => {
     res.render("facture", {
       transactions: sheetData,
       employee: undefined,
+      contrats,
+      gagnants,
       isa: isAdmin(req),
     });
   } catch (error) {
@@ -169,6 +173,8 @@ app.get("/facture/:employee", checkConnetion, async (req, res) => {
   try {
     const employeeName = req.params.employee;
     const sheetData = await getEmployeFactures(employeeName);
+    const contrats = await getContrats();
+    const gagnants = await getGagnants();
 
     sheetData.forEach((t) => {
       t.montant = `$${t.montant.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}`
@@ -177,6 +183,8 @@ app.get("/facture/:employee", checkConnetion, async (req, res) => {
     res.render("facture", {
       transactions: sheetData,
       employee: employeeName,
+      contrats,
+      gagnants,
       isa: isAdmin(req),
     });
   } catch (error) {

@@ -97,8 +97,17 @@
     </div>
   </body>
 
-  
+  <script>
+    const contrats = [];
+    const gagnants = [];
 
+    <% contrats.forEach(function(c) { %>
+    contrats.push('<%= c.name %>');
+    <% }); %>
+    <% gagnants.forEach(function(g) { %>
+    gagnants.push('<%= g.name %>');
+    <% }); %>
+  </script>
   <script src="/js/bootstrap.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/facture.js"></script>
