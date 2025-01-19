@@ -61,7 +61,6 @@ function makeEditable(row) {
     const __2 = cells[1].querySelector("select").value;
     const __6 = cells[5].querySelector("input").value;
     const __7 = cells[6].querySelector("input").value;
-    const __8 = cells[7].querySelector("input").value;
 
     const data = {
       id: id,
@@ -82,13 +81,13 @@ function makeEditable(row) {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          cells[0].textContent = _1;
-          cells[1].textContent = _2;
+          cells[0].textContent = __1;
+          cells[1].textContent = __2;
           cells[2].textContent = _3;
           cells[3].textContent = _4;
           cells[4].textContent = _5;
-          cells[5].textContent = _6;
-          cells[6].textContent = _7;
+          cells[5].textContent = __6;
+          cells[6].textContent = __7;
           cells[7].textContent = _8;
           cells[8].innerHTML = `<button id="btn-del" class="btn btn-danger btn-floating" data-id="${id}"><i class="fa-solid fa-xmark"></i></button>`;
         }
