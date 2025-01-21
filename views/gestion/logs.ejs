@@ -4,93 +4,87 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Los Santos Custom</title>
-    <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/main.css" />
-    <link rel="icon" href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico" type="image/x-icon" />
+    <link
+      rel="icon"
+      href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico"
+      type="image/x-icon"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
   </head>
-  <body data-bs-theme="dark">
-    <nav class="navbar navbar-expand-xl bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" style="pointer-events: none; cursor: default">
+          <img src="../img/logo.svg" />
+        </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
           aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-target="navbarBasicExample"
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/home">Employés</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/contrats">Contrats</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/gagnants">Gagnants</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/grades">Grades</a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="/gestion/logs"
-                >Logs</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/users">Utilisateurs</a>
-            </li>
-          </ul>
-          <div class="d-flex">
-            <button class="btn btn-primary" onclick="window.location.href='/'">
-              Retour
-            </button>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/gestion/home"> Employés </a>
+          <a class="navbar-item" href="/gestion/contrats"> Contrats </a>
+          <a class="navbar-item" href="/gestion/gagnants"> Gagnants </a>
+          <a class="navbar-item" href="/gestion/grades"> Grades </a>
+          <a class="navbar-item has-text-weight-bold" href="/gestion/logs">
+            Logs
+          </a>
+          <a class="navbar-item" href="/gestion/users"> Utilisateurs </a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="/">
+                <strong>Retour</strong>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </nav>
 
-    <div class="container mt-5 text-center">
-      <h2>Logs</h2>
+    <div class="container has-text-centered mt-6 mb-3">
+      <h2 class="title is-2">Logs</h2>
       <input
         type="text"
-        class="form-control mt-5"
+        class="input mt-5"
         id="search-bar"
         placeholder="Chercher par utilisateur, action ou date"
       />
       <div class="table-responsive mt-4">
-        <table class="table">
+        <table class="table mt-4" style="width: 100%;">
           <thead>
             <tr>
-              <th scope="col">Utilisateur</th>
-              <th scope="col">Action</th>
-              <th scope="col">Date</th>
+              <th>Utilisateur</th>
+              <th>Action</th>
+              <th>Date</th>
             </tr>
           </thead>
-          <tbody class="table-group-divider">
+          <tbody>
             <% logs.forEach(function(l) { %> <% if (admin) { %>
-            <tr class="align-middle">
+            <tr>
               <td><%= l.admin %></td>
               <td><%= l.action %></td>
               <td><%= new Date(l.timestamp).toLocaleString() %></td>
             </tr>
             <% } else { %>
-            <tr class="align-middle">
+            <tr>
               <td><%= l.admin.replace(/_.*/, '') %></td>
               <td><%= l.action %></td>
               <td><%= new Date(l.timestamp).toLocaleString() %></td>
@@ -102,6 +96,5 @@
     </div>
   </body>
 
-  <script src="/js/bootstrap.js"></script>
   <script src="/js/logs.js"></script>
 </html>

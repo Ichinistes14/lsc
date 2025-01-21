@@ -34,23 +34,19 @@ function makeEditable(row) {
   const _5 = cells[4].textContent; // Gagnant
   const _6 = cells[5].textContent;
 
-  cells[0].innerHTML = `<input type="text" class="form-control" value="${_1}" disabled />`;
-  cells[1].innerHTML = `<select
-                  class="form-select"
-                  id="type"
-                  aria-label="Choisir le type"
-                >
+  cells[0].innerHTML = `<input type="text" class="input" value="${_1}" disabled />`;
+  cells[1].innerHTML = `<div class="select"><select id="type" aria-label="Choisir le type" >
                   <option value="Réparation" selected>Réparation</option>
                   <option value="Bidon">Bidon</option>
                   <option value="Réparation + Bidon">Réparation + Bidon</option>
                   <option value="Custom">Custom</option>
                   <option value="Dépannage">Dépannage</option>
-                </select>`;
-  cells[2].innerHTML = `<input type="text" class="form-control" value="${_3}" />`;
+                </select></div>`;
+  cells[2].innerHTML = `<input type="text" class="input" value="${_3}" />`;
 
-  let selectHTML1 = `<select class="form-select"><option value="" selected>Aucun</option>`;
-  let selectHTML2 = `<select class="form-select"><option value="" selected>Aucun</option>`;
-  
+  let selectHTML1 = `<div class="select"><select><option value="" selected>Aucun</option>`;
+  let selectHTML2 = `<div class="select"><select><option value="" selected>Aucun</option>`;
+
   contrats.forEach((contrat) => {
     if (contrat === _4) {
       selectHTML1 += `<option value="${contrat}" selected>${contrat}</option>`;
@@ -58,7 +54,7 @@ function makeEditable(row) {
       selectHTML1 += `<option value="${contrat}">${contrat}</option>`;
     }
   });
-  selectHTML1 += `</select>`;
+  selectHTML1 += `</select></div>`;
   gagnants.forEach((gagnant) => {
     if (gagnant === _5) {
       selectHTML2 += `<option value="${gagnant}" selected>${gagnant}</option>`;
@@ -66,12 +62,12 @@ function makeEditable(row) {
       selectHTML2 += `<option value="${gagnant}">${gagnant}</option>`;
     }
   });
-  selectHTML2 += `</select>`;
+  selectHTML2 += `</select></div>`;
 
   cells[3].innerHTML = selectHTML1;
   cells[4].innerHTML = selectHTML2;
-  cells[5].innerHTML = `<input type="text" class="form-control" value="${_6}" disabled />`;
-  cells[6].innerHTML = `<button class="btn btn-primary btn-floating btn-save"><i class="fa-solid fa-floppy-disk"></i></button>`;
+  cells[5].innerHTML = `<input type="text" class="input" value="${_6}" disabled />`;
+  cells[6].innerHTML = `<button class="button is-primary btn-save" style="border-radius:50%;"><span class="icon is-small"><i class="fa-solid fa-floppy-disk"></i></span></button>`;
 
   cells[1].querySelector("select").value = _2;
 
@@ -109,7 +105,7 @@ function makeEditable(row) {
           cells[3].textContent = __4;
           cells[4].textContent = __5;
           cells[5].textContent = __6;
-          cells[6].innerHTML = `<button id="btn-del" class="btn btn-danger btn-floating" data-id="${id}"><i class="fa-solid fa-xmark"></i></button>`;
+          cells[6].innerHTML = `<button id="btn-del" class="button is-danger" style="border-radius: 50%;" data-id="${id}"><span class="icon is-small"><i class="fa-solid fa-xmark"></i></span></button>`;
         }
       })
       .catch((error) => {

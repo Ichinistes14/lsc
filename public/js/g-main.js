@@ -34,9 +34,9 @@ function makeEditable(row) {
   const _7 = cells[6].textContent;
   const _8 = cells[7].textContent;
 
-  cells[0].innerHTML = `<input type="text" class="form-control" value="${_1}" />`;
+  cells[0].innerHTML = `<input type="text" class="input" value="${_1}" />`;
 
-  let selectHTML = `<select class="form-select">`;
+  let selectHTML = `<div class="select"><select>`;
   
   grades.forEach((grade) => {
     if (grade === _2) {
@@ -45,15 +45,15 @@ function makeEditable(row) {
       selectHTML += `<option value="${grade}">${grade}</option>`;
     }
   });
-  selectHTML += `</select>`;
+  selectHTML += `</select></div>`;
   cells[1].innerHTML = selectHTML;
-  cells[2].innerHTML = `<input type="text" class="form-control" value="${_3}" disabled />`;
-  cells[3].innerHTML = `<input type="text" class="form-control" value="${_4}" disabled />`;
-  cells[4].innerHTML = `<input type="text" class="form-control" value="${_5}" disabled />`;
-  cells[5].innerHTML = `<input type="text" class="form-control" value="${_6}" />`;
-  cells[6].innerHTML = `<input type="text" class="form-control" value="${_7}" />`;
-  cells[7].innerHTML = `<input type="text" class="form-control" value="${_8}" disabled />`;
-  cells[8].innerHTML = `<button class="btn btn-primary btn-floating btn-save" data-id="${id}"><i class="fa-solid fa-floppy-disk"></i></button>`;
+  cells[2].innerHTML = `<input type="text" class="input" value="${_3}" disabled />`;
+  cells[3].innerHTML = `<input type="text" class="input" value="${_4}" disabled />`;
+  cells[4].innerHTML = `<input type="text" class="input" value="${_5}" disabled />`;
+  cells[5].innerHTML = `<input type="text" class="input" value="${_6}" />`;
+  cells[6].innerHTML = `<input type="text" class="input" value="${_7}" />`;
+  cells[7].innerHTML = `<input type="text" class="input" value="${_8}" disabled />`;
+  cells[8].innerHTML = `<button class="button is-primary btn-save" style="border-radius:50%;" data-id="${id}"><span class="icon is-small"><i class="fa-solid fa-floppy-disk"></i></span></button>`;
 
   row.querySelector(".btn-save").addEventListener("click", function () {
     row.classList.remove("editing");
@@ -89,7 +89,7 @@ function makeEditable(row) {
           cells[5].textContent = __6;
           cells[6].textContent = __7;
           cells[7].textContent = _8;
-          cells[8].innerHTML = `<button id="btn-del" class="btn btn-danger btn-floating" data-id="${id}"><i class="fa-solid fa-xmark"></i></button>`;
+          cells[8].innerHTML = `<button id="btn-del" class="button is-danger" style="border-radius:50%;" data-id="${id}"><span class="icon is-small"><i class="fa-solid fa-xmark"></i></span></button>`;
         }
       })
       .catch((error) => {
@@ -137,22 +137,7 @@ document.getElementById("addRowForm").addEventListener("submit", function (e) {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        const tbody = document.querySelector("tbody");
-        const newRow = `
-          <tr class="align-middle">
-            <td>${name}</td>
-            <td>${grade}</td>
-            <td>${revenue}</td>
-            <td>${companyRevenue}</td>
-            <td>${bonus}</td>
-            <td>${phone}</td>
-            <td>${rib}</td>
-            <td>${date}</td>
-            <td><button id="btn-del" class="btn btn-danger btn-floating"><i class="fa-solid fa-xmark"></i></button></td>
-          </tr>`;
-
-        tbody.insertAdjacentHTML("beforeend", newRow);
-        e.target.reset();
+        window.location.reload();
       }
     })
     .catch((error) => {

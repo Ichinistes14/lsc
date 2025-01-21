@@ -1,106 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Los Santos Custom</title>
-    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/main.css" />
     <link rel="icon" href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico" type="image/x-icon" />
   </head>
-  <body data-bs-theme="dark">
-    <nav class="navbar navbar-expand-xl bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" style="pointer-events: none; cursor: default">
+          <img src="img/logo.svg" />
+        </a>
+
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
           aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-target="navbarBasicExample"
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="/">Accueil</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/stats">Statistique</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/employe">Employé</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/facture">Facture</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/tombola">Tombola</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/message"
-                >Message</a
-              >
-            </li>
-          </ul>
-          <% if (isa) { %>
-          <div class="d-flex">
-            <button id="gestionB" class="btn btn-primary">Gestion</button>
-          </div>
-          <% } %>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/"> Accueil </a>
+          <a class="navbar-item" href="/stats"> Statistique </a>
+          <a class="navbar-item" href="/employe">
+            Employé
+          </a>
+          <a class="navbar-item" href="/facture"> Factures </a>
+          <a class="navbar-item" href="/tombola"> Tombola </a>
+          <a class="navbar-item has-text-weight-bold" href="/message"> Message </a>
         </div>
+
+        <% if (isa) { %>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="/gestion/home">
+                <strong>Gestion</strong>
+              </a>
+            </div>
+          </div>
+        </div>
+        <% } %>
       </div>
     </nav>
 
-    <div class="container mt-5 text-center">
-      <h2>Prévisualisation de message</h2>
-      <div class="form-floating mt-4 mb-4">
+    <div class="container is-max-tablet has-text-centered mt-6 px-5 mb-3">
+      <h2 class="title is-2">Prévisualisation de message</h2>
+      <div class="control my-4">
         <textarea
-          class="form-control"
+          class="textarea is-large has-fixed-size"
           placeholder="Écrivez votre message"
           id="messageContent"
-          style="height: 100px; overflow: hidden; resize: none"
         ></textarea>
-        <label for="messageContent">Écrivez votre message</label>
-        <i
-          class="resize-icon"
-          style="
-            position: absolute;
-            bottom: 5px;
-            right: 7.5px;
-            cursor: ns-resize;
-            font-size: 18px;
-          "
-          title="Redimensionner"
-          >↘</i
-        >
       </div>
-      <button type="button" class="btn btn-primary" id="copyMessage">
-        Copier le texte
-      </button>
-      <button type="button" class="btn btn-primary" id="primeExemple">
-        Prime
-      </button>
-      <button type="button" class="btn btn-danger" id="clear">Effacer</button>
-      <div id="previewMessage" class="mt-4 text-start"></div>
+      <p class="buttons is-centered">
+        <button type="button" class="button is-primary" id="copyMessage">
+          Copier le texte
+        </button>
+        <button type="button" class="button is-primary" id="primeExemple">
+          Prime
+        </button>
+        <button type="button" class="button is-danger" id="clear">Effacer</button>
+      </p>
+      <div id="previewMessage" class="container mt-4 has-text-left"></div>
     </div>
   </body>
 
-  <script src="/js/bootstrap.js"></script>
-  <script
-    src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-    crossorigin="anonymous"
-  ></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     var grades = [];
 
     <% grades.reverse().forEach(function(g) { %>
       grades.push("<%= g.name %>");
     <% }); %>
+    
+    $(document).ready(function () {
+      $(".navbar-burger").click(function () {
+        $(".navbar-burger").toggleClass("is-active");
+        $(".navbar-menu").toggleClass("is-active");
+      });
+    });
   </script>
-  <script src="/js/main.js"></script>
   <script src="/js/message.js"></script>
 </html>

@@ -4,209 +4,210 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Los Santos Custom</title>
-    <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/main.css" />
-    <link rel="icon" href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico" type="image/x-icon" />
+    <link
+      rel="icon"
+      href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico"
+      type="image/x-icon"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
   </head>
-  <body data-bs-theme="dark">
-    <nav class="navbar navbar-expand-xl bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" style="pointer-events: none; cursor: default">
+          <img src="../img/logo.svg" />
+        </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
           aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-target="navbarBasicExample"
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="/gestion/home"
-                >Employés</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/contrats">Contrats</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/gagnants">Gagnants</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/grades">Grades</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/logs">Logs</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/gestion/users">Utilisateurs</a>
-            </li>
-          </ul>
-          <div class="d-flex">
-            <button class="btn btn-primary" onclick="window.location.href='/'">
-              Retour
-            </button>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item has-text-weight-bold" href="/gestion/home">
+            Employés
+          </a>
+          <a class="navbar-item" href="/gestion/contrats"> Contrats </a>
+          <a class="navbar-item" href="/gestion/gagnants"> Gagnants </a>
+          <a class="navbar-item" href="/gestion/grades"> Grades </a>
+          <a class="navbar-item" href="/gestion/logs"> Logs </a>
+          <a class="navbar-item" href="/gestion/users"> Utilisateurs </a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="/">
+                <strong>Retour</strong>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </nav>
 
-    <div class="container mt-5 text-center">
-      <h2>Employés - <%= employees.length %></h2>
-      <button type="button" class="btn btn-danger mt-3" id="delFacture">
+    <div class="container has-text-centered mt-6 mb-3">
+      <h2 class="title is-2">Employés - <%= employees.length %></h2>
+      <button type="button" class="button is-danger mt-1" id="delFacture">
         Effacer les factures
       </button>
       <input
         type="text"
-        class="form-control mt-3"
+        class="input mt-4"
         id="search-bar"
         placeholder="Prénom de l'employé"
       />
-      <div class="table-responsive mt-3">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Employé</th>
-              <th scope="col">Grade</th>
-              <th scope="col">Chiffre d'Affaire</th>
-              <th scope="col">Chiffre Entreprise</th>
-              <th scope="col">Prime</th>
-              <th scope="col">Téléphone</th>
-              <th scope="col">RIB</th>
-              <th scope="col">Date d'Arriver</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="table-group-divider">
-            <tr class="editing">
-              <form id="addRowForm">
-                <td>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="name"
-                    placeholder="Prénom & Nom"
-                  />
-                </td>
-                <td>
-                  <select
-                    class="form-select"
-                    aria-label="Choisir le grade"
-                    name="grade"
-                  >
-                    <% grades = grades.reverse(); grades.forEach(function(g) { %>
-                    <% if (g.name === "Apprenti") { %>
-                      <option selected value="<%= g.name %>"><%= g.name %></option>
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th>Employé</th>
+            <th>Grade</th>
+            <th>Chiffre d'Affaire</th>
+            <th>Chiffre Entreprise</th>
+            <th>Prime</th>
+            <th>Téléphone</th>
+            <th>RIB</th>
+            <th>Date d'Arriver</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="editing">
+            <form id="addRowForm">
+              <td>
+                <input
+                  type="text"
+                  class="input"
+                  name="name"
+                  placeholder="Prénom & Nom"
+                />
+              </td>
+              <td>
+                <div class="select">
+                  <select aria-label="Choisir le grade" name="grade">
+                    <% grades = grades.reverse(); grades.forEach(function(g) {
+                    %> <% if (g.name === "Apprenti") { %>
+                    <option selected value="<%= g.name %>">
+                      <%= g.name %>
+                    </option>
                     <% return; } %>
                     <option value="<%= g.name %>"><%= g.name %></option>
                     <% }); %>
                   </select>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="revenue"
-                    value="$0"
-                    disabled
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="companyRevenue"
-                    value="$0"
-                    disabled
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="bonus"
-                    value="$0"
-                    disabled
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="phone"
-                    placeholder="Téléphone"
-                    value="555-"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="rib"
-                    placeholder="RIB"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="form-control datepicker_input"
-                    name="date"
-                    id="date"
-                    value="<%= new Date().getDate() %>/<%= new Date().getMonth() + 1 %>/<%= new Date().getFullYear() %>"
-                    disabled
-                  />
-                </td>
-                <td>
-                  <button type="submit" class="btn btn-primary">
-                    Enregistrer
-                  </button>
-                </td>
-              </form>
-            </tr>
-            <% employees.forEach(function(e) { %>
-            <tr data-id="<%= e._id %>" class="align-middle">
-              <td><%= e.name %></td>
-              <td><%= e.grade %></td>
-              <td><%= e.ca %></td>
-              <td><%= e.cae %></td>
-              <td><%= e.prime %></td>
-              <td><%= e.phone %></td>
-              <td><%= e.rib %></td>
-              <td><%= e.date %></td>
+                </div>
+              </td>
               <td>
-                <button id="btn-del" class="btn btn-danger btn-floating" data-id="<%= e._id %>">
-                  <i class="fa-solid fa-xmark"></i>
+                <input
+                  type="text"
+                  class="input"
+                  name="revenue"
+                  value="$0"
+                  disabled
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="input"
+                  name="companyRevenue"
+                  value="$0"
+                  disabled
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="input"
+                  name="bonus"
+                  value="$0"
+                  disabled
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="input"
+                  name="phone"
+                  placeholder="Téléphone"
+                  value="555-"
+                />
+              </td>
+              <td>
+                <input type="text" class="input" name="rib" placeholder="RIB" />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="input datepicker_input"
+                  name="date"
+                  id="date"
+                  value="<%= new Date().getDate() %>/<%= new Date().getMonth() + 1 %>/<%= new Date().getFullYear() %>"
+                  disabled
+                />
+              </td>
+              <td>
+                <button type="submit" class="button is-primary">
+                  Enregistrer
                 </button>
               </td>
-            </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      </div>
+            </form>
+          </tr>
+          <% employees.forEach(function(e) { %>
+          <tr data-id="<%= e._id %>">
+            <td><%= e.name %></td>
+            <td><%= e.grade %></td>
+            <td><%= e.ca %></td>
+            <td><%= e.cae %></td>
+            <td><%= e.prime %></td>
+            <td><%= e.phone %></td>
+            <td><%= e.rib %></td>
+            <td><%= e.date %></td>
+            <td>
+              <button
+                id="btn-del"
+                class="button is-danger"
+                style="border-radius: 50%"
+                data-id="<%= e._id %>"
+              >
+                <span class="icon is-small"
+                  ><i class="fa-solid fa-xmark"></i
+                ></span>
+              </button>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
     </div>
   </body>
 
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     var grades = [];
 
     <% grades.forEach(function(g) { %>
       grades.push("<%= g.name %>");
     <% }); %>
+
+    $(document).ready(function () {
+      $(".navbar-burger").click(function () {
+        $(".navbar-burger").toggleClass("is-active");
+        $(".navbar-menu").toggleClass("is-active");
+      });
+    });
   </script>
-  <script src="/js/bootstrap.js"></script>
   <script src="/js/g-main.js"></script>
 </html>

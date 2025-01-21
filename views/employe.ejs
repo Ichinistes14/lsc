@@ -1,230 +1,268 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Los Santos Custom</title>
-    <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/main.css" />
-    <link rel="icon" href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico" type="image/x-icon" />
+    <link
+      rel="icon"
+      href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico"
+      type="image/x-icon"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
   </head>
-  <body data-bs-theme="dark">
-    <nav class="navbar navbar-expand-xl bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" style="pointer-events: none; cursor: default">
+          <img src="img/logo.svg" />
+        </a>
+
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
           aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-target="navbarBasicExample"
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="/">Accueil</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/stats">Statistique</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/employe"
-                >Employé</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/facture">Facture</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/tombola">Tombola</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/message">Message</a>
-            </li>
-          </ul>
-          <% if (isa) { %>
-          <div class="d-flex">
-            <button id="gestionB" class="btn btn-primary">Gestion</button>
-          </div>
-          <% } %>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/"> Accueil </a>
+          <a class="navbar-item" href="/stats"> Statistique </a>
+          <a class="navbar-item has-text-weight-bold" href="/employe">
+            Employé
+          </a>
+          <a class="navbar-item" href="/facture"> Factures </a>
+          <a class="navbar-item" href="/tombola"> Tombola </a>
+          <a class="navbar-item" href="/message"> Message </a>
         </div>
+
+        <% if (isa) { %>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="/gestion/home">
+                <strong>Gestion</strong>
+              </a>
+            </div>
+          </div>
+        </div>
+        <% } %>
       </div>
     </nav>
 
-    <div class="container mt-5 text-center">
-      <h2>Employés</h2>
+    <div class="container has-text-centered mt-6 mb-3">
+      <h2 class="title is-2">Employés</h2>
       <input
         type="text"
-        class="form-control mt-5"
+        class="input mt-4"
         id="search-bar"
         placeholder="Prénom de l'employé"
       />
-      <div class="table-responsive mt-3">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Employé</th>
-              <th scope="col">Grade</th>
-              <th scope="col">Chiffre d'Affaire</th>
-              <th scope="col">Chiffre Entreprise</th>
-              <th scope="col">Prime</th>
-              <th scope="col">Téléphone</th>
-              <th scope="col">RIB</th>
-              <th scope="col">Date d'Arriver</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="table-group-divider">
-            <% employees.forEach(function(e) { %>
-            <tr class="align-middle">
-              <td><%= e.name %></td>
-              <td><%= e.grade %></td>
-              <td><%= e.ca %></td>
-              <td><%= e.cae %></td>
-              <td><%= e.prime %></td>
-              <td><%= e.phone %></td>
-              <td><%= e.rib %></td>
-              <td><%= e.date %></td>
-              <td>
-                <button
-                  class="btn btn-primary btn-floating"
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#addFacture"
-                  data-bs-name="<%= e.name %>"
-                >
+      <table class="table mt-5" style="width: 100%">
+        <thead>
+          <tr>
+            <th>Employé</th>
+            <th>Grade</th>
+            <th>Chiffre d'Affaire</th>
+            <th>Chiffre Entreprise</th>
+            <th>Prime</th>
+            <th>Téléphone</th>
+            <th>RIB</th>
+            <th>Date d'Arriver</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% employees.forEach(function(e) { %>
+          <tr class="is-vcentered">
+            <td><%= e.name %></td>
+            <td><%= e.grade %></td>
+            <td><%= e.ca %></td>
+            <td><%= e.cae %></td>
+            <td><%= e.prime %></td>
+            <td><%= e.phone %></td>
+            <td><%= e.rib %></td>
+            <td><%= e.date %></td>
+            <td>
+              <button
+                class="button is-primary js-modal-trigger"
+                data-target="addFacture"
+                data-name="<%= e.name %>"
+                style="border-radius: 50% !important"
+              >
+                <span class="icon is-small">
                   <i class="fa-solid fa-plus"></i>
-                </button>
-                <button
-                  class="btn btn-primary btn-floating"
-                  onclick="window.location.href=`/facture/<%= e.name %>`"
-                >
+                </span>
+              </button>
+              <button
+                class="button is-info"
+                style="border-radius: 50% !important"
+                onclick="window.location.href=`/facture/<%= e.name %>`"
+              >
+                <span class="icon is-small">
                   <i class="fa-solid fa-eye"></i>
-                </button>
-              </td>
-            </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      </div>
+                </span>
+              </button>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
     </div>
 
-    <div
-      class="modal fade"
-      id="addFacture"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="addFactureLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="addFactureLabel">
-              Ajouter une facture
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="f">
-              <input type="hidden" name="personName" id="personName" />
-              <div class="form-floating mb-3">
-                <select
-                  class="form-select"
-                  id="type"
-                  aria-label="Choisir le type"
-                >
-                  <option value="Réparation" selected>Réparation</option>
-                  <option value="Bidon">Bidon</option>
-                  <option value="Réparation + Bidon">Réparation + Bidon</option>
-                  <option value="Custom">Custom</option>
-                  <option value="Dépannage">Dépannage</option>
-                </select>
-                <label for="type">Type</label>
+    <div class="modal" id="addFacture">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Ajouter une facture</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <form id="f">
+            <input type="hidden" name="personName" id="personName" />
+            <div class="field mb-3">
+              <label class="label">Type</label>
+              <div class="control is-expanded">
+                <div class="select is-fullwidth">
+                  <select id="type" aria-label="Choisir le type">
+                    <option value="Réparation" selected>Réparation</option>
+                    <option value="Bidon">Bidon</option>
+                    <option value="Réparation + Bidon">
+                      Réparation + Bidon
+                    </option>
+                    <option value="Custom">Custom</option>
+                    <option value="Dépannage">Dépannage</option>
+                  </select>
+                </div>
               </div>
-              <div class="form-floating mb-3">
+            </div>
+            <div class="field mb-3">
+              <label class="label">Montant</label>
+              <div class="control">
                 <input
                   type="tel"
-                  class="form-control"
+                  class="input"
                   id="montant"
                   placeholder="500"
                   pattern="\d*"
                   inputmode="numeric"
                   required
                 />
-                <label for="montant">Montant</label>
               </div>
-              <div class="form-floating mb-3">
-                <select
-                  class="form-select"
-                  id="contrat"
-                  aria-label="Choisir un contrat"
-                >
-                  <option value="" selected>Aucun</option>
-                  <% contrats.forEach((c) => { %>
-                  <option value="<%= c.name %>"><%= c.name %></option>
-                  <% }) %>
-                </select>
-                <label for="contrat">Contrat</label>
+            </div>
+            <div class="field mb-3">
+              <label class="label">Contrat</label>
+              <div class="control is-expanded">
+                <div class="select is-fullwidth">
+                  <select id="contrat" aria-label="Choisir un contrat">
+                    <option value="" selected>Aucun</option>
+                    <% contrats.forEach((c) => { %>
+                    <option value="<%= c.name %>"><%= c.name %></option>
+                    <% }) %>
+                  </select>
+                </div>
               </div>
-              <div class="form-floating mb-3">
-                <select
-                  class="form-select"
-                  id="gagnant"
-                  aria-label="Choisir un gagnant"
-                >
-                  <option value="" selected>Aucun</option>
-                  <% gagnants.forEach((g) => { %>
-                  <option value="<%= g.name %>"><%= g.name %></option>
-                  <% }) %>
-                </select>
-                <label for="gagnant">Gagnant</label>
+            </div>
+            <div class="field mb-3">
+              <label class="label">Gagnant</label>
+              <div class="control is-expanded">
+                <div class="select is-fullwidth">
+                  <select id="gagnant" aria-label="Choisir un gagnant">
+                    <option value="" selected>Aucun</option>
+                    <% gagnants.forEach((g) => { %>
+                    <option value="<%= g.name %>"><%= g.name %></option>
+                    <% }) %>
+                  </select>
+                </div>
               </div>
-              <div id="liveAlert"></div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-danger"
-              data-bs-dismiss="modal"
-            >
-              Annuler
-            </button>
-            <button id="btnAddFacture" type="button" class="btn btn-primary">
+            </div>
+            <div id="liveAlert"></div>
+          </form>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="buttons">
+            <button id="btnAddFacture" class="button is-success">
               Ajouter
             </button>
+            <button class="button">Annuler</button>
           </div>
-        </div>
+        </footer>
       </div>
     </div>
   </body>
 
-  
-
-  <script src="/js/bootstrap.js"></script>
-  <script src="/js/main.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="/js/employe.js"></script>
   <script>
     document.getElementById("montant").addEventListener("input", function (e) {
       this.value = this.value.replace(/[^0-9]/g, "");
+    });
+    
+    $(document).ready(function () {
+      $(".navbar-burger").click(function () {
+        $(".navbar-burger").toggleClass("is-active");
+        $(".navbar-menu").toggleClass("is-active");
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      function openModal($el) {
+        $el.classList.add("is-active");
+      }
+
+      function closeModal($el) {
+        $el.classList.remove("is-active");
+      }
+
+      function closeAllModals() {
+        (document.querySelectorAll(".modal") || []).forEach(($modal) => {
+          closeModal($modal);
+        });
+      }
+      (document.querySelectorAll(".js-modal-trigger") || []).forEach(
+        ($trigger) => {
+          const modal = $trigger.dataset.target;
+          const name = $trigger.dataset.name;
+          const $target = document.getElementById(modal);
+
+          $trigger.addEventListener("click", () => {
+            openModal($target);
+
+            const modalTitle = addFacture.querySelector(".modal-card-title");
+
+            modalTitle.textContent = `Ajouter une facture à ${name}`;
+            document.getElementById("personName").value = name;
+          });
+        }
+      );
+      (
+        document.querySelectorAll(
+          ".modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button"
+        ) || []
+      ).forEach(($close) => {
+        const $target = $close.closest(".modal");
+
+        $close.addEventListener("click", () => {
+          closeModal($target);
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeAllModals();
+        }
+      });
     });
   </script>
 </html>

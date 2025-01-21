@@ -1,52 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Los Santos Custom</title>
-    <link rel="stylesheet" href="/css/bootstrap.css" />
-    <link rel="icon" href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico" type="image/x-icon" />
+    <link
+      rel="icon"
+      href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <style>
+      @import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
+      section {
+        padding: 0 !important;
+      }
+      .box {
+        --bulma-box-shadow: 0 0em 0.5em -0.075em hsla(0deg, 0%, 100%, 1),
+          0 0px 0 1px hsla(0deg, 0%, 100%, 0.02);
+      }
+    </style>
   </head>
-  <body
-    data-bs-theme="dark"
-    class="d-flex justify-content-center align-items-center vh-100"
-  >
-    <div class="container w-50 text-center">
-      <h2>Connexion</h2>
-      <hr class="hr hr-blurry my-5 table-group-divider" />
-      <form id="loginForm" class="needs-validation" novalidate>
-        <div class="mb-3">
-          <label for="id" class="form-label">Identifiant</label>
-          <input type="text" class="form-control" id="id" required />
-          <div class="invalid-feedback">
-            Vous devez mettre votre identifiant pour vous connecter
-          </div>
+  <body>
+    <section class="section has-text-centered" style="height: 100vh">
+      <div
+        class="container is-flex is-justify-content-center is-align-items-center"
+        style="height: 100vh"
+      >
+        <div class="box" style="width: 40%">
+          <h2 class="title is-2">Connexion</h2>
+          <hr style="width: 50%" />
+          <form id="loginForm" class="needs-validation" novalidate>
+            <div class="field">
+              <label class="label">Identifiant</label>
+              <div class="control has-icons-left has-icons-right">
+                <input id="id" class="input" type="text" />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </div>
+            </div>
+            <div class="notification is-danger has-text-left is-hidden">
+              <button class="delete"></button>
+            </div>
+            <div class="d-grid gap-2 mt-5">
+              <button type="submit" class="button is-primary">
+                Se connecter
+              </button>
+            </div>
+          </form>
         </div>
-        <div id="loginAlert" class="mb-3"></div>
-        <div class="d-grid gap-2">
-          <button type="submit" class="btn btn-primary">Se connecter</button>
-        </div>
-      </form>
-    </div>
+      </div>
+    </section>
   </body>
 
-  <script src="/js/bootstrap.js"></script>
   <script>
     (() => {
       "use strict";
 
-      const alertPlaceholder = document.getElementById("loginAlert");
-      const appendAlert = (message, type) => {
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = [
-          `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-          `   <div>${message}</div>`,
-          '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-          "</div>",
-        ].join("");
+      document.addEventListener("DOMContentLoaded", () => {
+        (document.querySelectorAll(".notification .delete") || []).forEach(
+          ($delete) => {
+            const $notification = $delete.parentNode;
 
-        alertPlaceholder.append(wrapper);
-      };
+            $delete.addEventListener("click", () => {
+              $notification.parentNode.removeChild($notification);
+            });
+          }
+        );
+      });
 
       const forms = document.querySelectorAll(".needs-validation");
 
@@ -54,6 +82,8 @@
         form.addEventListener(
           "submit",
           (event) => {
+            const id = document.getElementById("id");
+
             event.preventDefault();
 
             if (!form.checkValidity()) {
@@ -63,9 +93,7 @@
             form.classList.add("was-validated");
 
             if (form.checkValidity()) {
-              const id = document.getElementById("id").value;
-
-              const data = { id: id };
+              const data = { id: id.value };
 
               fetch("/api/login", {
                 method: "POST",
@@ -77,18 +105,25 @@
                 .then((response) => response.json())
                 .then((data) => {
                   if (data.success) {
-                    document.getElementById("loginForm").reset();
+                    id.classList.add("is-success");
                     window.location.href = "/";
                   } else {
-                    appendAlert("Identifiant invalide", "danger");
+                    const notification =
+                      document.querySelector(".notification");
+                    const icon = document.querySelector(".fas.fa-check");
+                    id.classList.add("is-danger");
+                    icon.classList.remove("fa-check");
+                    icon.classList.add("fa-xmark");
+                    notification.classList.remove("is-hidden");
+                    notification.innerHTML = "Identifiant invalide.";
                   }
                 })
                 .catch((error) => {
                   console.error(error);
-                  appendAlert(
-                    "Une erreur est survenue lors de la connexion. Merci de réessayer plus tard.",
-                    "danger"
-                  );
+                  const notification = document.querySelector(".notification");
+                  notification.classList.remove("is-hidden");
+                  notification.innerHTML =
+                    "Une erreur est survenue lors de la connexion. Merci de réessayer plus tard.";
                 });
             }
           },

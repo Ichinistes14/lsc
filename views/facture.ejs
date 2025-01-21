@@ -1,102 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Los Santos Custom</title>
-    <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/main.css" />
     <link rel="icon" href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
   </head>
-  <body data-bs-theme="dark">
-    <nav class="navbar navbar-expand-xl bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" aria-disabled="true">Los Santos Custom</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" style="pointer-events: none; cursor: default">
+          <img src="img/logo.svg" />
+        </a>
+
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
           aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-target="navbarBasicExample"
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="/"
-                >Accueil</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/stats">Statistique</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/employe">Employé</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/facture">Facture</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/tombola">Tombola</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/message">Message</a>
-            </li>
-          </ul>
-          <% if (isa) { %>
-          <div class="d-flex">
-            <button id="gestionB" class="btn btn-primary">Gestion</button>
-          </div>
-          <% } %>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/"> Accueil </a>
+          <a class="navbar-item" href="/stats"> Statistique </a>
+          <a class="navbar-item" href="/employe">
+            Employé
+          </a>
+          <a class="navbar-item has-text-weight-bold" href="/facture"> Factures </a>
+          <a class="navbar-item" href="/tombola"> Tombola </a>
+          <a class="navbar-item" href="/message"> Message </a>
         </div>
+
+        <% if (isa) { %>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="/gestion/home">
+                <strong>Gestion</strong>
+              </a>
+            </div>
+          </div>
+        </div>
+        <% } %>
       </div>
     </nav>
 
-    <div class="container mt-5 text-center">
+    <div class="container has-text-centered mt-6 mb-3">
       <% if (employee !== undefined) { %>
-      <h2>Factures de <%= employee %></h2>
+      <h2 class="title is-2">Factures de <%= employee %></h2>
       <% } else { %>
-      <h2>Factures</h2>
-      <input type="text" class="form-control mt-4" id="search-bar" placeholder="Prénom de l'employé">
+      <h2 class="title is-2">Factures</h2>
+      <input type="text" class="input mt-4" id="search-bar" placeholder="Prénom de l'employé">
       <% } %>
-      <div class="table-responsive mt-3">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Prénom</th>
-              <th scope="col">Type</th>
-              <th scope="col">Montant</th>
-              <th scope="col">Contrat</th>
-              <th scope="col">Gagnant</th>
-              <th scope="col">Date & Heure</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="table-group-divider align-middle">
-            <% let reversedTransactions = transactions.reverse(); %> 
-            <% reversedTransactions.forEach(function(t, index) { %>
-            <tr data-id="<%= t._id %>">
-              <td><%= t.name %></td>
-              <td><%= t.type %></td>
-              <td><%= t.montant %></td>
-              <td><%= t.contrat ? t.contrat : 'Aucun' %></td>
-              <td><%= t.gagnant ? t.gagnant : 'Aucun' %></td>
-              <td><%= t.date %></td>
-              <% if (t.type !== "Tombola") { %>
-              <td><button id="btn-del" class="btn btn-danger btn-floating" data-id="<%= t._id %>"><i class="fa-solid fa-xmark"></i></button></td>
-              <% } %>
-            </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      </div>
+      <table class="table is-large mt-3" style="width: 100%;">
+        <thead>
+          <tr>
+            <th>Prénom</th>
+            <th>Type</th>
+            <th>Montant</th>
+            <th>Contrat</th>
+            <th>Gagnant</th>
+            <th>Date & Heure</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% let reversedTransactions = transactions.reverse(); %> 
+          <% reversedTransactions.forEach(function(t, index) { %>
+          <tr data-id="<%= t._id %>">
+            <td><%= t.name %></td>
+            <td><%= t.type %></td>
+            <td><%= t.montant %></td>
+            <td><%= t.contrat ? t.contrat : 'Aucun' %></td>
+            <td><%= t.gagnant ? t.gagnant : 'Aucun' %></td>
+            <td><%= t.date %></td>
+            <% if (t.type !== "Tombola") { %>
+            <td><button id="btn-del" class="button is-danger" style="border-radius: 50%;" data-id="<%= t._id %>"><span class="icon is-small"><i class="fa-solid fa-xmark"></i></span></button></td>
+            <% } %>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
     </div>
   </body>
 
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     const contrats = [];
     const gagnants = [];
@@ -107,8 +105,13 @@
     <% gagnants.forEach(function(g) { %>
     gagnants.push('<%= g.name %>');
     <% }); %>
+    
+    $(document).ready(function () {
+      $(".navbar-burger").click(function () {
+        $(".navbar-burger").toggleClass("is-active");
+        $(".navbar-menu").toggleClass("is-active");
+      });
+    });
   </script>
-  <script src="/js/bootstrap.js"></script>
-  <script src="/js/main.js"></script>
   <script src="/js/facture.js"></script>
 </html>

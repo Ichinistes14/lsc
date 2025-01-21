@@ -11,7 +11,7 @@ $(document).ready(function () {
     e.preventDefault();
     const content = $("#messageContent").val();
 
-    $("#previewMessage").html(`<pre>${previewMarkdown(content)}</pre>`);
+    $("#previewMessage").html(`<pre style="background-color: hsl(221,14%,9%); border: .5px solid rgb(53, 58, 70); border-radius: 5px;">${previewMarkdown(content)}</pre>`);
   });
 
   $("#previewMessage").on("click", ".hidden-container", function () {
@@ -71,7 +71,7 @@ $(document).ready(function () {
       "Vos fiches ont été remis a 0.\nVous pouvez désormais attaqué votre nouvelle semaine.";
 
     $("#messageContent").val(message);
-    $("#previewMessage").html(`<pre>${previewMarkdown(message)}</pre>`);
+    $("#previewMessage").html(`<pre style="background-color: hsl(221,14%,9%); border: .5px solid rgb(53, 58, 70); border-radius: 5px;">${previewMarkdown(message)}</pre>`);
   });
 
   $("#clear").on("click", function () {
@@ -94,32 +94,4 @@ $(document).ready(function () {
 
     return htmlText;
   }
-
-  const $textarea = $("#messageContent");
-  const $resizeIcon = $(".resize-icon");
-
-  $textarea.on("input", function () {
-    $(this).height("100px");
-    $(this).height(this.scrollHeight + "px");
-  });
-
-  $resizeIcon.on("mousedown", function (e) {
-    e.preventDefault();
-
-    const startY = e.clientY;
-    const startHeight = parseInt($textarea.css("height"), 10);
-
-    function mouseMoveHandler(e) {
-      const newHeight = startHeight + (e.clientY - startY);
-      $textarea.css("height", newHeight + "px");
-    }
-
-    function mouseUpHandler() {
-      $(document).off("mousemove", mouseMoveHandler);
-      $(document).off("mouseup", mouseUpHandler);
-    }
-
-    $(document).on("mousemove", mouseMoveHandler);
-    $(document).on("mouseup", mouseUpHandler);
-  });
 });
