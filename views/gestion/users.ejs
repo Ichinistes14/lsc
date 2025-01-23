@@ -60,84 +60,94 @@
     </nav>
 
     <div class="container has-text-centered mt-6 mb-3">
-      <h2 class="title is-2">Utilisateurs - <%= users.length %></h2>
-      <div class="table-responsive mt-4">
-        <table class="table mt-4" style="width: 100%">
-          <thead>
-            <tr>
-              <th>Admin</th>
-              <th>Role</th>
-              <% if (admin || editor) { %>
-              <th>Action</th>
-              <% } %>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (admin || editor || editor2) { %>
-            <tr class="editing">
-              <form id="addRowForm">
+      <div class="section">
+        <h2 class="title is-2">Utilisateurs - <%= users.length %></h2>
+        <div class="table-container">
+          <table class="table mt-4">
+            <thead>
+              <tr>
+                <th>Admin</th>
+                <th>Role</th>
+                <% if (admin || editor) { %>
+                <th>Action</th>
+                <% } %>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (admin || editor || editor2) { %>
+              <tr class="editing">
+                <form id="addRowForm">
+                  <td>
+                    <input
+                      type="text"
+                      class="input"
+                      name="id"
+                      placeholder="Ajout d'un éditeur"
+                    />
+                  </td>
+                  <td>
+                    <div class="select" style="width: 100%">
+                      <select
+                        style="width: 100%"
+                        aria-label="Choisir le rôle"
+                        name="role"
+                      >
+                        <option value="user">Employé</option>
+                        <% if (admin || editor) { %>
+                        <option value="editor2">Chef</option>
+                        <% } %> <% if (admin) { %>
+                        <option value="editor">Editeur</option>
+                        <option value="admin">Admin</option>
+                        <% } %>
+                      </select>
+                    </div>
+                  </td>
+                  <td>
+                    <button type="submit" class="button is-primary">
+                      Enregistrer
+                    </button>
+                  </td>
+                </form>
+              </tr>
+
+              <% users.forEach(function(u) { %> <% if (u.role === 'admin') { %>
+              <tr>
+                <td><%= u.id.replace(/_.*/, '') %></td>
+                <td><%= u.role %></td>
+                <td>Accès insuffisant</td>
+              </tr>
+              <% } else if (u.role === 'editor' && !admin) { %>
+              <tr>
+                <td><%= u.id.replace(/_.*/, '') %></td>
+                <td><%= u.role %></td>
+                <td>Accès insuffisant</td>
+              </tr>
+              <% } else if (u.role === 'editor2' && !(admin || editor)) { %>
+              <tr>
+                <td><%= u.id.replace(/_.*/, '') %></td>
+                <td><%= u.role %></td>
+                <td>Accès insuffisant</td>
+              </tr>
+              <% } else { %>
+              <tr>
+                <td><%= u.id %></td>
+                <td><%= u.role %></td>
                 <td>
-                  <input
-                    type="text"
-                    class="input"
-                    name="id"
-                    placeholder="Ajout d'un éditeur"
-                  />
-                </td>
-                <td>
-                  <div class="select" style="width: 100%;">
-                    <select style="width: 100%;" aria-label="Choisir le rôle" name="role">
-                      <option value="user">Employé</option>
-                      <% if (admin || editor) { %>
-                      <option value="editor2">Chef</option>
-                      <% } %> <% if (admin) { %>
-                      <option value="editor">Editeur</option>
-                      <option value="admin">Admin</option>
-                      <% } %>
-                    </select>
-                  </div>
-                </td>
-                <td>
-                  <button type="submit" class="button is-primary">
-                    Enregistrer
+                  <button
+                    id="btn-del"
+                    class="button is-danger"
+                    style="border-radius: 50%"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa-solid fa-xmark"></i>
+                    </span>
                   </button>
                 </td>
-              </form>
-            </tr>
-
-            <% users.forEach(function(u) { %> <% if (u.role === 'admin') { %>
-            <tr>
-              <td><%= u.id.replace(/_.*/, '') %></td>
-              <td><%= u.role %></td>
-              <td>Accès insuffisant</td>
-            </tr>
-            <% } else if (u.role === 'editor' && !admin) { %>
-            <tr>
-              <td><%= u.id.replace(/_.*/, '') %></td>
-              <td><%= u.role %></td>
-              <td>Accès insuffisant</td>
-            </tr>
-            <% } else if (u.role === 'editor2' && !(admin || editor)) { %>
-            <tr>
-              <td><%= u.id.replace(/_.*/, '') %></td>
-              <td><%= u.role %></td>
-              <td>Accès insuffisant</td>
-            </tr>
-            <% } else { %>
-            <tr>
-              <td><%= u.id %></td>
-              <td><%= u.role %></td>
-              <td>
-                <button id="btn-del" class="button is-danger" style="border-radius: 50%;">
-                  <span class="icon is-small">
-                    <i class="fa-solid fa-xmark"></i>
-                  </span>
-                </button>
-              </td>
-            </tr>
-            <% } %> <% }); %> <% } %>
-          </tbody>
-        </table>
+              </tr>
+              <% } %> <% }); %> <% } %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </body>

@@ -60,137 +60,146 @@
     </nav>
 
     <div class="container has-text-centered mt-6 mb-3">
-      <h2 class="title is-2">Employés - <%= employees.length %></h2>
-      <button type="button" class="button is-danger mt-1" id="delFacture">
-        Effacer les factures
-      </button>
-      <input
-        type="text"
-        class="input mt-4"
-        id="search-bar"
-        placeholder="Prénom de l'employé"
-      />
-      <table class="table mt-3">
-        <thead>
-          <tr>
-            <th>Employé</th>
-            <th>Grade</th>
-            <th>Chiffre d'Affaire</th>
-            <th>Chiffre Entreprise</th>
-            <th>Prime</th>
-            <th>Téléphone</th>
-            <th>RIB</th>
-            <th>Date d'Arriver</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="editing">
-            <form id="addRowForm">
-              <td>
-                <input
-                  type="text"
-                  class="input"
-                  name="name"
-                  placeholder="Prénom & Nom"
-                />
-              </td>
-              <td>
-                <div class="select">
-                  <select aria-label="Choisir le grade" name="grade">
-                    <% grades = grades.reverse(); grades.forEach(function(g) {
-                    %> <% if (g.name === "Apprenti") { %>
-                    <option selected value="<%= g.name %>">
-                      <%= g.name %>
-                    </option>
-                    <% return; } %>
-                    <option value="<%= g.name %>"><%= g.name %></option>
-                    <% }); %>
-                  </select>
-                </div>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  class="input"
-                  name="revenue"
-                  value="$0"
-                  disabled
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  class="input"
-                  name="companyRevenue"
-                  value="$0"
-                  disabled
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  class="input"
-                  name="bonus"
-                  value="$0"
-                  disabled
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  class="input"
-                  name="phone"
-                  placeholder="Téléphone"
-                  value="555-"
-                />
-              </td>
-              <td>
-                <input type="text" class="input" name="rib" placeholder="RIB" />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  class="input datepicker_input"
-                  name="date"
-                  id="date"
-                  value="<%= new Date().getDate() %>/<%= new Date().getMonth() + 1 %>/<%= new Date().getFullYear() %>"
-                  disabled
-                />
-              </td>
-              <td>
-                <button type="submit" class="button is-primary">
-                  Enregistrer
-                </button>
-              </td>
-            </form>
-          </tr>
-          <% employees.forEach(function(e) { %>
-          <tr data-id="<%= e._id %>">
-            <td><%= e.name %></td>
-            <td><%= e.grade %></td>
-            <td><%= e.ca %></td>
-            <td><%= e.cae %></td>
-            <td><%= e.prime %></td>
-            <td><%= e.phone %></td>
-            <td><%= e.rib %></td>
-            <td><%= e.date %></td>
-            <td>
-              <button
-                id="btn-del"
-                class="button is-danger"
-                style="border-radius: 50%"
-                data-id="<%= e._id %>"
-              >
-                <span class="icon is-small"
-                  ><i class="fa-solid fa-xmark"></i
-                ></span>
-              </button>
-            </td>
-          </tr>
-          <% }); %>
-        </tbody>
-      </table>
+      <div class="section">
+        <h2 class="title is-2">Employés - <%= employees.length %></h2>
+        <button type="button" class="button is-danger mt-1" id="delFacture">
+          Effacer les factures
+        </button>
+        <input
+          type="text"
+          class="input mt-4"
+          id="search-bar"
+          placeholder="Prénom de l'employé"
+        />
+        <div class="table-container">
+          <table class="table mt-3">
+            <thead>
+              <tr>
+                <th>Employé</th>
+                <th>Grade</th>
+                <th>Chiffre d'Affaire</th>
+                <th>Chiffre Entreprise</th>
+                <th>Prime</th>
+                <th>Téléphone</th>
+                <th>RIB</th>
+                <th>Date d'Arriver</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="editing">
+                <form id="addRowForm">
+                  <td>
+                    <input
+                      type="text"
+                      class="input"
+                      name="name"
+                      placeholder="Prénom & Nom"
+                    />
+                  </td>
+                  <td>
+                    <div class="select">
+                      <select aria-label="Choisir le grade" name="grade">
+                        <% grades = grades.reverse(); grades.forEach(function(g)
+                        { %> <% if (g.name === "Apprenti") { %>
+                        <option selected value="<%= g.name %>">
+                          <%= g.name %>
+                        </option>
+                        <% return; } %>
+                        <option value="<%= g.name %>"><%= g.name %></option>
+                        <% }); %>
+                      </select>
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="input"
+                      name="revenue"
+                      value="$0"
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="input"
+                      name="companyRevenue"
+                      value="$0"
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="input"
+                      name="bonus"
+                      value="$0"
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="input"
+                      name="phone"
+                      placeholder="Téléphone"
+                      value="555-"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="input"
+                      name="rib"
+                      placeholder="RIB"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="input datepicker_input"
+                      name="date"
+                      id="date"
+                      value="<%= new Date().getDate() %>/<%= new Date().getMonth() + 1 %>/<%= new Date().getFullYear() %>"
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <button type="submit" class="button is-primary">
+                      Enregistrer
+                    </button>
+                  </td>
+                </form>
+              </tr>
+              <% employees.forEach(function(e) { %>
+              <tr data-id="<%= e._id %>">
+                <td><%= e.name %></td>
+                <td><%= e.grade %></td>
+                <td><%= e.ca %></td>
+                <td><%= e.cae %></td>
+                <td><%= e.prime %></td>
+                <td><%= e.phone %></td>
+                <td><%= e.rib %></td>
+                <td><%= e.date %></td>
+                <td>
+                  <button
+                    id="btn-del"
+                    class="button is-danger"
+                    style="border-radius: 50%"
+                    data-id="<%= e._id %>"
+                  >
+                    <span class="icon is-small"
+                      ><i class="fa-solid fa-xmark"></i
+                    ></span>
+                  </button>
+                </td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </body>
 

@@ -61,7 +61,8 @@
     </nav>
 
     <div class="container has-text-centered mt-6 mb-3">
-      <h2 class="title is-2">Grades - <%= grades.length %></h2>
+      <div class="section">
+        <h2 class="title is-2">Grades - <%= grades.length %></h2>
       <input
         type="text"
         class="input mt-5"
@@ -72,8 +73,8 @@
       <button id="save-order" class="button is-primary mt-4">
         Sauvegarder l'ordre
       </button>
-      <div class="table-responsive mt-3">
-        <table class="table mt-3" style="width: 100%">
+      <div class="table-container">
+        <table class="table mt-3">
           <thead>
             <tr>
               <th>Nom du grade</th>
@@ -112,6 +113,7 @@
             <% }); %>
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   </body>

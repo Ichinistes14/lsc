@@ -63,63 +63,71 @@
     </nav>
 
     <div class="container has-text-centered mt-6 mb-3">
-      <h2 class="title is-2">Employés</h2>
-      <input
-        type="text"
-        class="input mt-4"
-        id="search-bar"
-        placeholder="Prénom de l'employé"
-      />
-      <table class="table mt-5" style="width: 100%">
-        <thead>
-          <tr>
-            <th>Employé</th>
-            <th>Grade</th>
-            <th>Chiffre d'Affaire</th>
-            <th>Chiffre Entreprise</th>
-            <th>Prime</th>
-            <th>Téléphone</th>
-            <th>RIB</th>
-            <th>Date d'Arriver</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% employees.forEach(function(e) { %>
-          <tr class="is-vcentered">
-            <td><%= e.name %></td>
-            <td><%= e.grade %></td>
-            <td><%= e.ca %></td>
-            <td><%= e.cae %></td>
-            <td><%= e.prime %></td>
-            <td><%= e.phone %></td>
-            <td><%= e.rib %></td>
-            <td><%= e.date %></td>
-            <td>
-              <button
-                class="button is-primary js-modal-trigger"
-                data-target="addFacture"
-                data-name="<%= e.name %>"
-                style="border-radius: 50% !important"
-              >
-                <span class="icon is-small">
-                  <i class="fa-solid fa-plus"></i>
-                </span>
-              </button>
-              <button
-                class="button is-info"
-                style="border-radius: 50% !important"
-                onclick="window.location.href=`/facture/<%= e.name %>`"
-              >
-                <span class="icon is-small">
-                  <i class="fa-solid fa-eye"></i>
-                </span>
-              </button>
-            </td>
-          </tr>
-          <% }); %>
-        </tbody>
-      </table>
+      <div class="section">
+        <h2 class="title is-2">Employés</h2>
+        <input
+          type="text"
+          class="input mt-4"
+          id="search-bar"
+          placeholder="Prénom de l'employé"
+        />
+        <div class="table-container">
+          <table class="table mt-5">
+            <thead>
+              <tr>
+                <th>Employé</th>
+                <th>Grade</th>
+                <th>Chiffre d'Affaire</th>
+                <th>Chiffre Entreprise</th>
+                <th>Prime</th>
+                <th>Téléphone</th>
+                <th>RIB</th>
+                <th>Date d'Arriver</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% employees.forEach(function(e) { %>
+              <tr class="is-vcentered">
+                <td><%= e.name %></td>
+                <td><%= e.grade %></td>
+                <td><%= e.ca %></td>
+                <td><%= e.cae %></td>
+                <td><%= e.prime %></td>
+                <td><%= e.phone %></td>
+                <td><%= e.rib %></td>
+                <td><%= e.date %></td>
+                <td>
+                  <div
+                    class="buttons is-flex is-justify-content-center is-align-items-center is-flex-wrap-nowrap"
+                  >
+                    <button
+                      class="button is-primary js-modal-trigger"
+                      data-target="addFacture"
+                      data-name="<%= e.name %>"
+                      style="border-radius: 50% !important"
+                    >
+                      <span class="icon is-small">
+                        <i class="fa-solid fa-plus"></i>
+                      </span>
+                    </button>
+                    <button
+                      class="button is-info"
+                      style="border-radius: 50% !important"
+                      onclick="window.location.href=`/facture/<%= e.name %>`"
+                    >
+                      <span class="icon is-small">
+                        <i class="fa-solid fa-eye"></i>
+                      </span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <div class="modal" id="addFacture">
@@ -209,7 +217,7 @@
     document.getElementById("montant").addEventListener("input", function (e) {
       this.value = this.value.replace(/[^0-9]/g, "");
     });
-    
+
     $(document).ready(function () {
       $(".navbar-burger").click(function () {
         $(".navbar-burger").toggleClass("is-active");

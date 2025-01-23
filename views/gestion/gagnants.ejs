@@ -60,65 +60,73 @@
     </nav>
 
     <div class="container has-text-centered mt-6 mb-3">
-      <h2 class="title is-2">Gagnants - <%= gagnants.length %></h2>
-      <input
-        type="text"
-        class="input mt-5"
-        id="search-bar"
-        placeholder="Nom du gagnant"
-      />
-      <table class="table mt-3" style="width: 100%">
-        <thead>
-          <tr>
-            <th>Nom & Prénom</th>
-            <th>Montant</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="editing">
-            <form id="addRowForm">
-              <td>
-                <input
-                  type="text"
-                  class="input"
-                  name="name"
-                  placeholder="Nom du gagnant"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  class="input"
-                  name="montant"
-                  id="montant"
-                  placeholder="Nombre de réparation"
-                  pattern="\d*"
-                  inputmode="numeric"
-                />
-              </td>
-              <td>
-                <button type="submit" class="button is-primary">
-                  Enregistrer
-                </button>
-              </td>
-            </form>
-          </tr>
-          <% gagnants.forEach(function(c) { %> <% if (!c) return; %>
-          <tr data-id="<%= c._id %>">
-            <td><%= c.name %></td>
-            <td><%= c.nombre %></td>
-            <td>
-              <button id="btn-del" class="button is-danger" style="border-radius: 50%">
-                <span class="icon is-small">
-                  <i class="fa-solid fa-xmark"></i>
-                </span>
-              </button>
-            </td>
-          </tr>
-          <% }); %>
-        </tbody>
-      </table>
+      <div class="section">
+        <h2 class="title is-2">Gagnants - <%= gagnants.length %></h2>
+        <input
+          type="text"
+          class="input mt-5"
+          id="search-bar"
+          placeholder="Nom du gagnant"
+        />
+        <div class="table-container">
+          <table class="table mt-3">
+            <thead>
+              <tr>
+                <th>Nom & Prénom</th>
+                <th>Montant</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="editing">
+                <form id="addRowForm">
+                  <td>
+                    <input
+                      type="text"
+                      class="input"
+                      name="name"
+                      placeholder="Nom du gagnant"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="input"
+                      name="montant"
+                      id="montant"
+                      placeholder="Nombre de réparation"
+                      pattern="\d*"
+                      inputmode="numeric"
+                    />
+                  </td>
+                  <td>
+                    <button type="submit" class="button is-primary">
+                      Enregistrer
+                    </button>
+                  </td>
+                </form>
+              </tr>
+              <% gagnants.forEach(function(c) { %> <% if (!c) return; %>
+              <tr data-id="<%= c._id %>">
+                <td><%= c.name %></td>
+                <td><%= c.nombre %></td>
+                <td>
+                  <button
+                    id="btn-del"
+                    class="button is-danger"
+                    style="border-radius: 50%"
+                  >
+                    <span class="icon is-small">
+                      <i class="fa-solid fa-xmark"></i>
+                    </span>
+                  </button>
+                </td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </body>
 

@@ -72,7 +72,6 @@ document.getElementById("addRowForm").addEventListener("submit", function (e) {
 
 var el = document.getElementById("grades-list");
 var sortable = Sortable.create(el, {
-  handle: ".align-middle",
   animation: 150
 });
 

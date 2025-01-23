@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Los Santos Custom</title>
     <link rel="stylesheet" href="/css/main.css" />
-    <link rel="icon" href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link
+      rel="icon"
+      href="https://raw.githubusercontent.com/Ichinistes14/lsc/refs/heads/main/public/img/logo-lsc.ico"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
   </head>
   <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -33,10 +40,10 @@
         <div class="navbar-start">
           <a class="navbar-item" href="/"> Accueil </a>
           <a class="navbar-item" href="/stats"> Statistique </a>
-          <a class="navbar-item" href="/employe">
-            Employé
+          <a class="navbar-item" href="/employe"> Employé </a>
+          <a class="navbar-item has-text-weight-bold" href="/facture">
+            Factures
           </a>
-          <a class="navbar-item has-text-weight-bold" href="/facture"> Factures </a>
           <a class="navbar-item" href="/tombola"> Tombola </a>
           <a class="navbar-item" href="/message"> Message </a>
         </div>
@@ -56,41 +63,61 @@
     </nav>
 
     <div class="container has-text-centered mt-6 mb-3">
-      <% if (employee !== undefined) { %>
-      <h2 class="title is-2">Factures de <%= employee %></h2>
-      <% } else { %>
-      <h2 class="title is-2">Factures</h2>
-      <input type="text" class="input mt-4" id="search-bar" placeholder="Prénom de l'employé">
-      <% } %>
-      <table class="table is-large mt-3" style="width: 100%;">
-        <thead>
-          <tr>
-            <th>Prénom</th>
-            <th>Type</th>
-            <th>Montant</th>
-            <th>Contrat</th>
-            <th>Gagnant</th>
-            <th>Date & Heure</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% let reversedTransactions = transactions.reverse(); %> 
-          <% reversedTransactions.forEach(function(t, index) { %>
-          <tr data-id="<%= t._id %>">
-            <td><%= t.name %></td>
-            <td><%= t.type %></td>
-            <td><%= t.montant %></td>
-            <td><%= t.contrat ? t.contrat : 'Aucun' %></td>
-            <td><%= t.gagnant ? t.gagnant : 'Aucun' %></td>
-            <td><%= t.date %></td>
-            <% if (t.type !== "Tombola") { %>
-            <td><button id="btn-del" class="button is-danger" style="border-radius: 50%;" data-id="<%= t._id %>"><span class="icon is-small"><i class="fa-solid fa-xmark"></i></span></button></td>
-            <% } %>
-          </tr>
-          <% }); %>
-        </tbody>
-      </table>
+      <div class="section">
+        <% if (employee !== undefined) { %>
+        <h2 class="title is-2">Factures de <%= employee %></h2>
+        <% } else { %>
+        <h2 class="title is-2">Factures</h2>
+        <input
+          type="text"
+          class="input mt-4"
+          id="search-bar"
+          placeholder="Prénom de l'employé"
+        />
+        <% } %>
+        <div class="table-container">
+          <table class="table is-large mt-3">
+            <thead>
+              <tr>
+                <th>Prénom</th>
+                <th>Type</th>
+                <th>Montant</th>
+                <th>Contrat</th>
+                <th>Gagnant</th>
+                <th>Date & Heure</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let reversedTransactions = transactions.reverse(); %> <%
+              reversedTransactions.forEach(function(t, index) { %>
+              <tr data-id="<%= t._id %>">
+                <td><%= t.name %></td>
+                <td><%= t.type %></td>
+                <td><%= t.montant %></td>
+                <td><%= t.contrat ? t.contrat : 'Aucun' %></td>
+                <td><%= t.gagnant ? t.gagnant : 'Aucun' %></td>
+                <td><%= t.date %></td>
+                <% if (t.type !== "Tombola") { %>
+                <td>
+                  <button
+                    id="btn-del"
+                    class="button is-danger"
+                    style="border-radius: 50%"
+                    data-id="<%= t._id %>"
+                  >
+                    <span class="icon is-small"
+                      ><i class="fa-solid fa-xmark"></i
+                    ></span>
+                  </button>
+                </td>
+                <% } %>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </body>
 
@@ -105,7 +132,7 @@
     <% gagnants.forEach(function(g) { %>
     gagnants.push('<%= g.name %>');
     <% }); %>
-    
+
     $(document).ready(function () {
       $(".navbar-burger").click(function () {
         $(".navbar-burger").toggleClass("is-active");
