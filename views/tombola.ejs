@@ -90,14 +90,20 @@
       <div class="section">
         <h2 class="title is-2">Tombola</h2>
         <h4 class="title is-4">Prix - <span>$<%= tarif %></span></h4>
+        <% if (isa) { %>
         <div class="buttons is-centered">
-          <button id="btn-modify-tarif" class="button is-info" onclick="openNotification()">
+          <button
+            id="btn-modify-tarif"
+            class="button is-info"
+            onclick="openNotification()"
+          >
             Modifier le prix
           </button>
           <button id="btn-delete-all" class="button is-danger">
             Tout supprimer
           </button>
         </div>
+        <% } %>
         <input
           type="text"
           class="input"
@@ -218,7 +224,7 @@
 
       $("#valid-tarif").click(function () {
         const prix = $("#prix").val();
-        
+
         $.ajax({
           url: "/modify-tarif",
           type: "POST",
