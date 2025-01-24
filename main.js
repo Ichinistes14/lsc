@@ -24,6 +24,9 @@ const {
   addTombola,
   modifyTombola,
   deleteTombola,
+  modifyTarif,
+  deleteAllTombola,
+  getTarif,
 } = require("./lib/google");
 
 const User = require("./models/User");
@@ -97,6 +100,25 @@ async function isAdmin(req) {
 
   if (user.role === "admin" || user.role === "editor" || user.role === "editor2") {
     return true;
+  } else {
+    return false;
+  }
+}
+
+const isAdmin2 = async (req, res, next) => {
+  const d = crypto.AES.decrypt(
+    decodeURIComponent(req.cookies.id),
+    `kr:37bJOrM]q+ZD4Hvk1oT(d>0>S!/*H{O2v3)F3bNKYQ;UfseIzxh1.g"H/Y'!`
+  ).toString(crypto.enc.Utf8);
+
+  const user = await User.findOne({ id: d });
+
+  if (
+    user.role === "admin" ||
+    user.role === "editor" ||
+    user.role === "editor2"
+  ) {
+    return next();
   } else {
     return false;
   }
@@ -192,7 +214,9 @@ app.get("/facture/:employee", checkConnetion, async (req, res) => {
 app.get("/tombola", checkConnetion, async (req, res) => {
   const tombolas = await getTombola();
   const employees = await Employe.find();
-  res.render("tombola", { tombolas, employees, isa: isAdmin(req) });
+  const tarif = await getTarif();
+
+  res.render("tombola", { tombolas, employees, tarif, isa: isAdmin(req) });
 });
 
 app.get("/message", checkConnetion, async (req, res) => {
@@ -284,6 +308,32 @@ app.post("/delete-tombola", checkConnetion, async (req, res) => {
     res.status(500).send({ error: "Erreur lors de la suppresion de la tombola" });
   }
 });
+
+app.post("/modify-tarif", isAdmin2, async (req, res) => {
+  try {
+    const { prix } = req.body;
+
+    await logAction(`Tarif tombola modifié pour ${prix}`, req.cookies.id);
+    await modifyTarif(prix);
+    res.status(200).send({ success: "Tarif modifié avec succès" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: "Erreur lors de la modification du tarif" });
+  }
+});
+
+app.post("/delete-all-tombola", isAdmin2, async (req, res) => {
+  try {
+    await logAction(`Toute les tombola sont supprimés`, req.cookies.id);
+    await deleteAllTombola();
+    res.status(200).send({ success: "Tombola supprimé avec succès" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: "Erreur lors de la suppresion de la tombola" });
+  }
+});
+
+// START SERVER
 
 const db = mongoose.connection;
 db.on("error", (err) => console.error("MongoDB connection error:", err));

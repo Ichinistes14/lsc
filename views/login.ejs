@@ -15,23 +15,29 @@
     />
     <style>
       @import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
-      section {
-        padding: 0 !important;
+
+      :root {
+        --bulma-hr-margin: 1.5rem auto;
+        --bulma-size-normal: 1.25rem;
       }
-      .box {
-        --bulma-box-shadow: 0 0em 0.5em -0.075em hsla(0deg, 0%, 100%, 1),
-          0 0px 0 1px hsla(0deg, 0%, 100%, 0.02);
+
+      .container {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .section {
+        width: 100%;
+        max-width: 600px;
       }
     </style>
   </head>
   <body>
-    <section class="section has-text-centered" style="height: 100vh">
-      <div
-        class="container is-flex is-justify-content-center is-align-items-center"
-        style="height: 100vh"
-      >
-        <div class="box" style="width: 40%">
-          <h2 class="title is-2">Connexion</h2>
+    <div class="container has-text-centered is-flex is-justify-content-center is-align-items-center">
+      <div class="section is-large">
+        <h2 class="title is-2">Connexion</h2>
           <hr style="width: 50%" />
           <form id="loginForm" class="needs-validation" novalidate>
             <div class="field">
@@ -55,9 +61,8 @@
               </button>
             </div>
           </form>
-        </div>
       </div>
-    </section>
+    </div>
   </body>
 
   <script>

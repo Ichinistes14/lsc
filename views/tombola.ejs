@@ -14,6 +14,30 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
+    <style>
+      .notification {
+        bottom: 0.25rem;
+        right: 1rem;
+        position: fixed;
+        width: 20%;
+      }
+
+      .notification > .delete {
+        top: 1rem;
+      }
+
+      .notification > .title:not(:last-child) {
+        margin-bottom: 0;
+      }
+
+      @media only screen and (max-width: 768px) {
+        .notification {
+          width: 92.2705314%;
+          bottom: 0.25rem;
+          left: 1rem;
+        }
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -65,15 +89,23 @@
     <div class="container has-text-centered mt-6 mb-3">
       <div class="section">
         <h2 class="title is-2">Tombola</h2>
-        <h4 class="title is-4">Prix - <span>$250</span></h4>
+        <h4 class="title is-4">Prix - <span>$<%= tarif %></span></h4>
+        <div class="buttons is-centered">
+          <button id="btn-modify-tarif" class="button is-info" onclick="openNotification()">
+            Modifier le prix
+          </button>
+          <button id="btn-delete-all" class="button is-danger">
+            Tout supprimer
+          </button>
+        </div>
         <input
           type="text"
-          class="input mt-4"
+          class="input"
           id="search-bar"
           placeholder="Prénom du participant"
         />
         <div class="table-container">
-          <table class="table mt-3">
+          <table class="table mt-4">
             <thead>
               <tr>
                 <th>Employé</th>
@@ -131,7 +163,8 @@
                 </form>
               </tr>
               <% let reversedTombola = tombolas.reverse(); %> <%
-              reversedTombola.forEach(function(t, index) { %>
+              reversedTombola.forEach(function(t, index) { if (!t.name) return;
+              %>
               <tr data-id="<%= t._id %>">
                 <td><%= t.employe %></td>
                 <td><%= t.name %></td>
@@ -156,6 +189,13 @@
         </div>
       </div>
     </div>
+
+    <div class="notification is-hidden">
+      <button class="delete"></button>
+      <h4 class="title is-4">Prix</h4>
+      <input type="tel" class="input mt-3" id="prix" placeholder="Prix" />
+      <button id="valid-tarif" class="button is-primary mt-2">Valider</button>
+    </div>
   </body>
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -164,11 +204,44 @@
     document.getElementById("nombre").addEventListener("input", function (e) {
       this.value = this.value.replace(/[^0-9]/g, "");
     });
+    document.getElementById("prix").addEventListener("input", function (e) {
+      this.value = this.value.replace(/[^0-9]/g, "");
+    });
 
     $(document).ready(function () {
+      $("#prix").val("");
+
       $(".navbar-burger").click(function () {
         $(".navbar-burger").toggleClass("is-active");
         $(".navbar-menu").toggleClass("is-active");
+      });
+
+      $("#valid-tarif").click(function () {
+        const prix = $("#prix").val();
+        
+        $.ajax({
+          url: "/modify-tarif",
+          type: "POST",
+          data: { prix: prix },
+          success: function (data) {
+            if (data.success) {
+              $(".notification").toggleClass("is-hidden");
+              $(".title > span").text("$" + prix);
+            }
+          },
+        });
+      });
+
+      $("#btn-delete-all").click(function () {
+        $.ajax({
+          url: "/delete-all-tombola",
+          type: "POST",
+          success: function (data) {
+            if (data.success) {
+              location.reload();
+            }
+          },
+        });
       });
     });
 
@@ -243,6 +316,22 @@
             console.error(error);
           });
       });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      (document.querySelectorAll(".notification .delete") || []).forEach(
+        ($delete) => {
+          const $notification = $delete.parentNode;
+
+          $delete.addEventListener("click", () => {
+            $notification.classList.add("is-hidden");
+          });
+        }
+      );
+    });
+
+    function openNotification() {
+      $(".notification").toggleClass("is-hidden");
     }
   </script>
 </html>
