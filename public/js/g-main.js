@@ -66,7 +66,7 @@ function makeEditable(row) {
       id: id,
       name: __1,
       grade: __2,
-      date: __8,
+      date: _8,
       rib: __7,
       phone: __6,
     };
