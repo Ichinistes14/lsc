@@ -41,10 +41,10 @@
           <a class="navbar-item" href="/gestion/contrats"> Contrats </a>
           <a class="navbar-item" href="/gestion/gagnants"> Gagnants </a>
           <a class="navbar-item" href="/gestion/grades"> Grades </a>
-          <a class="navbar-item" href="/gestion/history"> Historique </a>
-          <a class="navbar-item has-text-weight-bold" href="/gestion/logs">
-            Logs
+          <a class="navbar-item has-text-weight-bold" href="/gestion/history">
+            Historique
           </a>
+          <a class="navbar-item" href="/gestion/logs"> Logs </a>
           <a class="navbar-item" href="/gestion/users"> Utilisateurs </a>
         </div>
 
@@ -62,51 +62,41 @@
 
     <div class="container has-text-centered mt-6 mb-3">
       <div class="section">
-        <h2 class="title is-2">Logs - <%= logs.length %></h2>
-        <input
-          type="text"
-          class="input mt-5"
-          id="search-bar"
-          placeholder="Chercher par utilisateur, action ou date"
-        />
+        <h1 class="title has-text-centered">Historique des Backups</h1>
+
+        <% if (backup.length > 0) { %>
         <div class="table-container">
           <table class="table mt-4">
             <thead>
               <tr>
-                <th>Utilisateur</th>
-                <th>Action</th>
-                <th>Date</th>
+                <th>Date du Backup</th>
+                <th>Nombre de Factures</th>
+                <th>Voir</th>
               </tr>
             </thead>
             <tbody>
-              <% logs.forEach(function(l) { %> <% if (admin) { %>
+              <% backup.forEach(b => { %>
               <tr>
-                <td><%= l.admin %></td>
-                <td><%= l.action %></td>
-                <td><%= new Date(l.timestamp).toLocaleString() %></td>
+                <td><%= b.date %></td>
+                <td><%= b.employeesMetrics.length %></td>
+                <td>
+                  <a
+                    href="/gestion/history/<%= b.date %>"
+                    class="button is-link"
+                    >Consulter</a
+                  >
+                </td>
               </tr>
-              <% } else { %>
-              <tr>
-                <td><%= l.admin.replace(/_.*/, '') %></td>
-                <td><%= l.action %></td>
-                <td><%= new Date(l.timestamp).toLocaleString() %></td>
-              </tr>
-              <% } %> <% }); %>
+              <% }); %>
             </tbody>
           </table>
         </div>
+        <% } else { %>
+        <p class="has-text-centered">Aucune backup disponible.</p>
+        <% } %>
       </div>
     </div>
   </body>
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $(".navbar-burger").click(function () {
-        $(".navbar-burger").toggleClass("is-active");
-        $(".navbar-menu").toggleClass("is-active");
-      });
-    });
-  </script>
-  <script src="/js/logs.js"></script>
 </html>

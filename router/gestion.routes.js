@@ -22,6 +22,7 @@ const {
   addGagnant,
   deleteGagnant,
   modifyGrade,
+  getBackup,
 } = require("../lib/google");
 
 async function logAction(action, admin) {
@@ -126,6 +127,32 @@ router.get("/grades", checkConnetion, async (req, res) => {
     const grades = await getGrades();
 
     res.render("gestion/grades", { grades });
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+});
+
+router.get("/history", checkConnetion, async (req, res) => {
+  try {
+    const backup = await getBackup();
+
+    res.render("gestion/history", { backup });
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+});
+
+router.get("/history/:date", checkConnetion, async (req, res) => {
+  try {
+    const dateParam = new Date(req.params.date);
+
+    const date = `${dateParam.getFullYear()}-${String(dateParam.getMonth() + 1).padStart(2, "0")}-${dateParam.getDate()}`;
+    
+    const backup = await getBackup(date);
+
+    res.render("gestion/historyDate", { employees: backup ? backup.employeesMetrics : [], date: req.params.date });
   } catch (err) {
     console.error(err);
     res.sendStatus(500);
