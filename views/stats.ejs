@@ -126,7 +126,16 @@
   </script>
   <script>
       const ctx = document.getElementById("myChart");
-      const historyData = <%- JSON.stringify(data) %>;
+      var historyData = <%- JSON.stringify(data) %>;
+      historyData = historyData.sort((a, b) => {
+        const [yearA, weekA] = a.label.split(' - ').map(Number);
+        const [yearB, weekB] = b.label.split(' - ').map(Number);
+        
+        if (yearA !== yearB) {
+          return yearA - yearB;
+        }
+        return weekA - weekB;
+      });
       const skipped = (ctx, value) =>
     ctx.p0.skip || ctx.p1.skip ? value : undefined;
       const down = (ctx, value) =>

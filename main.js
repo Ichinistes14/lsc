@@ -27,7 +27,6 @@ const {
   modifyTarif,
   deleteAllTombola,
   getTarif,
-  saveEmployeesMetricsBeforeDeletion,
 } = require("./lib/google");
 
 const User = require("./models/User");
