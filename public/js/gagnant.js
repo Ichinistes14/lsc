@@ -31,7 +31,7 @@ function addDeleteListener(button) {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          row.remove();
+          window.location.reload();
         } else {
           console.error("Échec de la suppression :", data.message);
         }
@@ -64,9 +64,7 @@ document.getElementById("addRowForm").addEventListener("submit", function (e) {
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.success) {
-        window.location.reload();
-      }
+      window.location.reload();
     })
     .catch((error) => {
       console.error(error);

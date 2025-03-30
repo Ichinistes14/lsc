@@ -3,10 +3,8 @@ const crypto = require("crypto-js");
 
 const router = express.Router();
 
-const User = require("../models/User");
-const Employe = require("../models/Employe");
-const Log = require("../models/Log");
 const {
+  supabase,
   getGrades,
   addGrade,
   deleteGrade,
@@ -26,20 +24,25 @@ const {
 } = require("../lib/google");
 
 async function logAction(action, admin) {
-  var _admin = await crypto.AES.decrypt(
-    admin,
-    `kr:37bJOrM]q+ZD4Hvk1oT(d>0>S!/*H{O2v3)F3bNKYQ;UfseIzxh1.g"H/Y'!`
-  ).toString(crypto.enc.Utf8);
+  try {
+    const _admin = crypto.AES.decrypt(
+      admin,
+      `kr:37bJOrM]q+ZD4Hvk1oT(d>0>S!/*H{O2v3)F3bNKYQ;UfseIzxh1.g"H/Y'!`
+    ).toString(crypto.enc.Utf8);
 
-  if (!_admin) {
-    return console.error("Non décodé");
+    if (!_admin) {
+      return console.error("Non décodé");
+    }
+
+    const { error } = await supabase
+      .from("log")
+      .insert([{ action, admin: _admin }]);
+    if (error) {
+      console.error("Erreur lors de l'enregistrement du log:", error);
+    }
+  } catch (error) {
+    console.error("Erreur lors de l'enregistrement du log:", error);
   }
-
-  const log = new Log({
-    action,
-    admin: _admin,
-  });
-  await log.save();
 }
 
 const checkConnetion = async (req, res, next) => {
@@ -49,18 +52,27 @@ const checkConnetion = async (req, res, next) => {
       `kr:37bJOrM]q+ZD4Hvk1oT(d>0>S!/*H{O2v3)F3bNKYQ;UfseIzxh1.g"H/Y'!`
     ).toString(crypto.enc.Utf8);
 
-    const user = await User.findOne({ id: d });
+    const { data: user, error } = await supabase
+      .from("user")
+      .select("*")
+      .eq("id", d)
+      .single();
+
+    if (error) {
+      console.error("Erreur lors de la recherche de l'utilisateur:", error);
+      return res.redirect("/");
+    }
 
     if (
-      (user && user.role === "admin") ||
-      user.role === "editor" ||
-      user.role === "editor2"
+      user &&
+      (user.role === "admin" ||
+        user.role === "editor" ||
+        user.role === "editor2")
     ) {
       return next();
     }
 
-    if (!isAdmin(req)) return;
-
+    if (!(await isAdmin(req))) return res.redirect("/");
     res.redirect("/");
   } else {
     res.redirect("/login");
@@ -73,12 +85,20 @@ async function isAdmin(req) {
     `kr:37bJOrM]q+ZD4Hvk1oT(d>0>S!/*H{O2v3)F3bNKYQ;UfseIzxh1.g"H/Y'!`
   ).toString(crypto.enc.Utf8);
 
-  const user = await User.findOne({ id: d });
+  const { data: user, error } = await supabase
+    .from("user")
+    .select("role")
+    .eq("id", d)
+    .single();
+
+  if (error) {
+    console.error("Erreur lors de la recherche de l'utilisateur:", error);
+    return false;
+  }
 
   if (
-    user.role === "admin" ||
-    user.role === "editor" ||
-    user.role === "editor2"
+    user &&
+    (user.role === "admin" || user.role === "editor" || user.role === "editor2")
   ) {
     return true;
   } else {
@@ -148,11 +168,16 @@ router.get("/history/:date", checkConnetion, async (req, res) => {
   try {
     const dateParam = new Date(req.params.date);
 
-    const date = `${dateParam.getFullYear()}-${String(dateParam.getMonth() + 1).padStart(2, "0")}-${dateParam.getDate()}`;
-    
+    const date = `${dateParam.getFullYear()}-${String(
+      dateParam.getMonth() + 1
+    ).padStart(2, "0")}-${dateParam.getDate()}`;
+
     const backup = await getBackup(date);
 
-    res.render("gestion/historyDate", { employees: backup ? backup.employeesMetrics : [], date: req.params.date });
+    res.render("gestion/historyDate", {
+      employees: backup ? backup.employeesMetrics : [],
+      date: req.params.date,
+    });
   } catch (err) {
     console.error(err);
     res.sendStatus(500);
@@ -161,14 +186,23 @@ router.get("/history/:date", checkConnetion, async (req, res) => {
 
 router.get("/logs", checkConnetion, async (req, res) => {
   try {
-    const logs = await Log.find().sort({ timestamp: -1 });
-    const u = await crypto.AES.decrypt(
+    const { data: logs, error: logsError } = await supabase
+      .from("log")
+      .select("*")
+      .order("timestamp", { ascending: false });
+
+    if (logsError) {
+      console.error("Erreur lors de la récupération des log:", logsError);
+      return res.sendStatus(500);
+    }
+
+    const u = crypto.AES.decrypt(
       decodeURIComponent(req.cookies.id),
       `kr:37bJOrM]q+ZD4Hvk1oT(d>0>S!/*H{O2v3)F3bNKYQ;UfseIzxh1.g"H/Y'!`
     ).toString(crypto.enc.Utf8);
     var _u = false;
 
-    if (u == "Malik_9227") {
+    if (u === "Malik_9227") {
       _u = true;
     }
 
@@ -181,8 +215,20 @@ router.get("/logs", checkConnetion, async (req, res) => {
 
 router.get("/users", checkConnetion, async (req, res) => {
   try {
-    const users = await User.find({ id: { $exists: true } });
-    const u = await crypto.AES.decrypt(
+    const { data: users, error: usersError } = await supabase
+      .from("user")
+      .select("*")
+      .not("id", "is", null);
+
+    if (usersError) {
+      console.error(
+        "Erreur lors de la récupération des utilisateurs:",
+        usersError
+      );
+      return res.sendStatus(500);
+    }
+
+    const u = crypto.AES.decrypt(
       decodeURIComponent(req.cookies.id),
       `kr:37bJOrM]q+ZD4Hvk1oT(d>0>S!/*H{O2v3)F3bNKYQ;UfseIzxh1.g"H/Y'!`
     ).toString(crypto.enc.Utf8);
@@ -190,20 +236,24 @@ router.get("/users", checkConnetion, async (req, res) => {
     var editor = false;
     var editor2 = false;
 
-    if (u == "Malik_9227") {
+    if (u === "Malik_9227") {
       _u = true;
     }
 
-    const user = await User.findOne({ id: u });
+    const { data: user, error: userError } = await supabase
+      .from("user")
+      .select("*")
+      .eq("id", u)
+      .single();
 
-    if ((await user) && (await user.role) === "editor") {
+    if (user && user.role === "editor") {
       editor = true;
-    } else if ((await user) && (await user.role) === "editor2") {
+    } else if (user && user.role === "editor2") {
       editor2 = true;
     }
 
     res.render("gestion/users", { users, admin: _u, editor, editor2 });
-  } catch {
+  } catch (err) {
     console.error(err);
     res.sendStatus(500);
   }
@@ -219,13 +269,19 @@ router.post("/add-employe", checkConnetion, async (req, res) => {
     const id =
       name.split(" ")[0] +
       `_${Math.floor(1000 + Math.random() * 9000).toString()}`;
-    const user = new User({
-      id: id,
-      role: "user",
-      employe: employe._id,
-    });
 
-    await user.save();
+    const { data: user, error: userError } = await supabase
+      .from("user")
+      .insert([{ id: id, role: "user", employe: employe._id }])
+      .select()
+      .single();
+
+    if (userError) {
+      console.error("Erreur lors de l'ajout de l'utilisateur:", userError);
+      return res
+        .status(500)
+        .send({ error: "Erreur lors de l'ajout de l'employé" });
+    }
 
     await modifyEmploye(employe._id, { user: user._id });
 
@@ -235,7 +291,7 @@ router.post("/add-employe", checkConnetion, async (req, res) => {
     res.status(200).send({ success: "Employé ajouté" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res.status(500).send({ error: "Erreur lors de l'ajout de l'employé" });
   }
 });
 
@@ -258,7 +314,9 @@ router.post("/modify-employe", checkConnetion, async (req, res) => {
     res.status(200).send({ success: "Employé modifié" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res
+      .status(500)
+      .send({ error: "Erreur lors de la modification de l'employé" });
   }
 });
 
@@ -267,27 +325,21 @@ router.post("/delete-employe", checkConnetion, async (req, res) => {
 
   try {
     const employe = await deleteEmploye(id);
-    if (!employe.user) {
+
+    if (employe) {
       await logAction(
-        `Suppresion d'un employé ${await employe.name}`,
+        `Suppresion d'un employé ${employe.name}`,
         req.cookies.id
       );
+      await logAction(`Suppresion d'un utilisateur`, req.cookies.id);
+
       return res.status(200).send({ success: "Employé supprimé" });
     }
-    const user = await User.findByIdAndDelete(await employe.user);
-    await logAction(
-      `Suppresion d'un employé ${await employe.name}`,
-      req.cookies.id
-    );
-
-    if (await user) {
-      await logAction(`Suppresion d'un utilisateur`, req.cookies.id);
-    }
-
-    res.status(200).send({ success: "Employé supprimé" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res
+      .status(500)
+      .send({ error: "Erreur lors de la suppression de l'employé" });
   }
 });
 
@@ -301,7 +353,7 @@ router.post("/add-contrat", checkConnetion, async (req, res) => {
     res.status(200).send({ success: "Contrat ajouté" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res.status(500).send({ error: "Erreur lors de l'ajout du contrat" });
   }
 });
 
@@ -315,7 +367,7 @@ router.post("/delete-contrat", checkConnetion, async (req, res) => {
     res.status(200).send({ success: "Contrat supprimé" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res.status(500).send({ error: "Erreur lors de la suppression du contrat" });
   }
 });
 
@@ -329,7 +381,7 @@ router.post("/add-gagnant", checkConnetion, async (req, res) => {
     res.status(200).send({ success: "Gagnant ajouté" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res.status(500).send({ error: "Erreur lors de l'ajout du gagnant" });
   }
 });
 
@@ -343,7 +395,7 @@ router.post("/delete-gagnant", checkConnetion, async (req, res) => {
     res.status(200).send({ success: "Gagnant supprimé" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res.status(500).send({ error: "Erreur lors de la suppression du gagnant" });
   }
 });
 
@@ -357,7 +409,7 @@ router.post("/add-grade", checkConnetion, async (req, res) => {
     res.status(200).send({ success: "Grade ajouté" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res.status(500).send({ error: "Erreur lors de l'ajout du grade" });
   }
 });
 
@@ -372,7 +424,9 @@ router.post("/order-grades", checkConnetion, async (req, res) => {
     res.status(200).send({ success: "Grades ordonnés" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res
+      .status(500)
+      .send({ error: "Erreur lors de l'ordonnancement des grades" });
   }
 });
 
@@ -386,7 +440,7 @@ router.post("/delete-grade", checkConnetion, async (req, res) => {
     res.status(200).send({ success: "Grade supprimé" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res.status(500).send({ error: "Erreur lors de la suppression du grade" });
   }
 });
 
@@ -394,18 +448,56 @@ router.post("/add-user", checkConnetion, async (req, res) => {
   const { id, role } = req.body;
 
   try {
-    const user = new User({
-      id: id,
-      role: role,
-    });
+    const { error: userInsertError } = await supabase
+      .from("user")
+      .insert([{ id: id, role: role }]);
 
-    await user.save();
+    if (userInsertError) {
+      console.error(
+        "Erreur lors de l'ajout de l'utilisateur:",
+        userInsertError
+      );
+      return res
+        .status(500)
+        .send({ error: "Erreur lors de l'ajout de l'utilisateur" });
+    }
+
     await logAction(`Ajout d'un utilisateur: ${id}`, req.cookies.id);
 
     res.status(200).send({ success: "Utilisateur ajouté" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res.status(500).send({ error: "Erreur lors de l'ajout de l'utilisateur" });
+  }
+});
+
+router.post("/modify-user", checkConnetion, async (req, res) => {
+  const { _id, id, role } = req.body;
+
+  try {
+    const { error: userUpdateError } = await supabase
+      .from("user")
+      .update({ role: role })
+      .eq("_id", _id);
+
+    if (userUpdateError) {
+      console.error(
+        "Erreur lors de la modification de l'utilisateur:",
+        userUpdateError
+      );
+      return res
+        .status(500)
+        .send({ error: "Erreur lors de la modification de l'utilisateur" });
+    }
+
+    await logAction(`Modification d'un utilisateur: ${id}, Rôle : ${role}`, req.cookies.id);
+
+    res.status(200).send({ success: "Utilisateur modifié" });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .send({ error: "Erreur lors de la modification de l'utilisateur" });
   }
 });
 
@@ -413,25 +505,41 @@ router.post("/delete-user", checkConnetion, async (req, res) => {
   const { id } = req.body;
 
   try {
-    const user = await User.findOneAndDelete({ id: id });
-    if (!user.employe) {
-      await logAction(`Suppresion d'un utilisateur: ${id}`, req.cookies.id);
-      return res.status(200).send({ success: "Utilisateur supprimé" });
-    }
-    const employe = await Employe.findOneAndDelete(await user.employe);
-    await logAction(`Suppresion d'un utilisateur: ${id}`, req.cookies.id);
+    const { data: user, error: userError } = await supabase
+      .from("user")
+      .select("employe")
+      .eq("id", id)
+      .single();
 
-    if (await employe) {
-      await logAction(
-        `Suppresion d'un employé: ${employe.name}`,
-        req.cookies.id
+    if (userError) {
+      console.error("Erreur lors de la recherche de l'utilisateur:", userError);
+      return res
+        .status(500)
+        .send({ error: "Erreur lors de la suppression de l'utilisateur" });
+    }
+
+    const { error: userDeleteError } = await supabase
+      .from("user")
+      .delete()
+      .eq("id", id);
+    if (userDeleteError) {
+      console.error(
+        "Erreur lors de la suppression de l'utilisateur:",
+        userDeleteError
       );
+    }
+    await logAction(`Suppresion d'un utilisateur: ${id}`, req.cookies.id);
+    if (user && user.employe) {
+      await deleteEmploye(user.employe);
+      await logAction(`Suppresion d'un employé`, req.cookies.id);
     }
 
     res.status(200).send({ success: "Utilisateur supprimé" });
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res
+      .status(500)
+      .send({ error: "Erreur lors de la suppression de l'utilisateur" });
   }
 });
 

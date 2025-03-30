@@ -163,7 +163,7 @@ document.querySelectorAll("#btn-del").forEach((b) => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          row.remove();
+          window.location.reload();
         } else {
           console.error("Échec de la suppression :", data.message);
         }

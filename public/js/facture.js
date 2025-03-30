@@ -76,14 +76,14 @@ function makeEditable(row) {
     const __1 = cells[0].querySelector("input").value;
     const __2 = cells[1].querySelector("select").value;
     const __3 = cells[2].querySelector("input").value;
-    const __4 = cells[3].querySelector("input").value;
-    const __5 = cells[4].querySelector("input").value;
+    const __4 = cells[3].querySelector("select").value;
+    const __5 = cells[4].querySelector("select").value;
     const __6 = cells[5].querySelector("input").value;
 
     const data = {
       id: id,
       type: __2,
-      montant: __3.replace("$", ""),
+      montant: __3.replace("$", "").replace(" ", ""),
       contrat: __4,
       gagnant: __5,
       date: __6,

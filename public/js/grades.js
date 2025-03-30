@@ -1,20 +1,3 @@
-document.getElementById("search-bar").addEventListener("input", function () {
-  let searchValue = this.value.toLowerCase();
-  let rows = document.querySelectorAll("tbody tr");
-
-  rows.forEach(function (row) {
-    if (row.classList.contains("editing")) return;
-
-    let employeeName = row.querySelector("td").textContent.toLowerCase();
-
-    if (employeeName.includes(searchValue)) {
-      row.style.display = "";
-    } else {
-      row.style.display = "none";
-    }
-  });
-});
-
 function addDeleteListener(button) {
   button.addEventListener("click", (e) => {
     const row = e.target.closest("tr");
@@ -61,9 +44,7 @@ document.getElementById("addRowForm").addEventListener("submit", function (e) {
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.success) {
-        window.location.reload();
-      }
+      window.location.reload();
     })
     .catch((error) => {
       console.error(error);

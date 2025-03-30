@@ -69,7 +69,7 @@
               <tr>
                 <th>Admin</th>
                 <th>Role</th>
-                <% if (admin || editor) { %>
+                <% if (admin || editor || editor2) { %>
                 <th>Action</th>
                 <% } %>
               </tr>
@@ -95,16 +95,16 @@
                       >
                         <option value="user">Employé</option>
                         <% if (admin || editor) { %>
-                        <option value="editor2">Chef</option>
+                        <option value="editor2">Manageur</option>
                         <% } %> <% if (admin) { %>
-                        <option value="editor">Editeur</option>
+                        <option value="editor">Co-Patron</option>
                         <option value="admin">Admin</option>
                         <% } %>
                       </select>
                     </div>
                   </td>
                   <td>
-                    <button type="submit" class="button is-primary">
+                    <button type="submit" class="button is-link">
                       Enregistrer
                     </button>
                   </td>
@@ -130,7 +130,7 @@
                 <td>Accès insuffisant</td>
               </tr>
               <% } else { %>
-              <tr>
+              <tr data-id="<%= u._id %>">
                 <td><%= u.id %></td>
                 <td><%= u.role %></td>
                 <td>
