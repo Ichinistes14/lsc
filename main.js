@@ -27,6 +27,7 @@ const {
   modifyTarif,
   deleteAllTombola,
   getTarif,
+  getEmployes,
 } = require("./lib/google");
 
 const apiRouter = require("./router/api.routes");
@@ -190,6 +191,7 @@ app.get("/employe", checkConnetion, async (req, res) => {
 app.get("/facture", checkConnetion, async (req, res) => {
   try {
     const sheetData = await getFactures();
+    const employes = await getEmployes();
     const contrats = await getContrats();
     const gagnants = await getGagnants();
 
@@ -200,6 +202,7 @@ app.get("/facture", checkConnetion, async (req, res) => {
     res.render("facture", {
       transactions: sheetData,
       employee: undefined,
+      employes,
       contrats,
       gagnants,
       isa: await isAdmin(req),
@@ -214,6 +217,7 @@ app.get("/facture/:employee", checkConnetion, async (req, res) => {
   try {
     const employeeName = req.params.employee;
     const sheetData = await getEmployeFactures(employeeName);
+    const employes = await getEmployes();
     const contrats = await getContrats();
     const gagnants = await getGagnants();
 
@@ -224,6 +228,7 @@ app.get("/facture/:employee", checkConnetion, async (req, res) => {
     res.render("facture", {
       transactions: sheetData,
       employee: employeeName,
+      employes,
       contrats,
       gagnants,
       isa: await isAdmin(req),
@@ -255,11 +260,36 @@ app.post("/add-facture", checkConnetion, async (req, res) => {
     const { name, type, montant, contrat, gagnant } = req.body;
 
     await logAction(`Facture ajoutée pour ${name}`, req.cookies.id);
-    await addFacture(name, montant, type, contrat, gagnant);
+    await addFacture(crypto.AES.decrypt(
+      req.cookies.id,
+      `kr:37bJOrM]q+ZD4Hvk1oT(d>0>S!/*H{O2v3)F3bNKYQ;UfseIzxh1.g"H/Y'!`
+    ).toString(crypto.enc.Utf8), name, montant, type, contrat, gagnant);
     res.status(200).send({ success: "Facture ajoutée avec succès" });
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: "Erreur lors de l'ajout de la facture" });
+  }
+});
+
+app.post("/info-facture", checkConnetion, async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const { data: facture, error } = await supabase
+      .from("facture")
+      .select("*")
+      .eq("_id", id)
+      .single();
+
+    if (error) {
+      console.error("Erreur lors de la recherche de la facture:", error);
+      return res.status(500).send({ error: "Erreur lors de la recherche de la facture" });
+    }
+
+    res.status(200).send({ facture });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: "Erreur lors de la recherche de la facture" });
   }
 });
 

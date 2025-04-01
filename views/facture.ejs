@@ -14,6 +14,23 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
+    <style>
+      .modal-card-head {
+        padding-bottom: 1rem;
+      }
+      .modal-card-body {
+        padding: 1rem;
+        padding-bottom: 2rem;
+      }
+      .modal-card-foot {
+        padding: 1rem;
+        background-color: var(--bulma-modal-card-head-background-color);
+      }
+      .modal-card-foot .button {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -98,20 +115,42 @@
                 <td><%= t.contrat ? t.contrat : 'Aucun' %></td>
                 <td><%= t.gagnant ? t.gagnant : 'Aucun' %></td>
                 <td><%= t.date %></td>
-                <% if (t.type !== "Tombola") { %>
                 <td>
-                  <button
-                    id="btn-del"
-                    class="button is-danger"
-                    style="border-radius: 50%"
-                    data-id="<%= t._id %>"
+                  <div
+                    class="buttons is-flex is-justify-content-center is-align-items-center is-flex-wrap-nowrap"
                   >
-                    <span class="icon is-small"
-                      ><i class="fa-solid fa-xmark"></i
-                    ></span>
-                  </button>
+                    <button
+                      class="button is-info btn-info"
+                      style="border-radius: 50%"
+                      data-id="<%= t._id %>"
+                    >
+                      <span class="icon is-small"
+                        ><i class="fa-solid fa-info"></i
+                      ></span>
+                    </button>
+                    <% if (t.type !== "Tombola") { %>
+                    <button
+                      class="button is-warning btn-modify"
+                      style="border-radius: 50%"
+                      data-id="<%= t._id %>"
+                    >
+                      <span class="icon is-small"
+                        ><i class="fa-solid fa-pen"></i
+                      ></span>
+                    </button>
+                    <button
+                      id="btn-del"
+                      class="button is-danger"
+                      style="border-radius: 50%"
+                      data-id="<%= t._id %>"
+                    >
+                      <span class="icon is-small"
+                        ><i class="fa-solid fa-xmark"></i
+                      ></span>
+                    </button>
+                    <% } %>
+                  </div>
                 </td>
-                <% } %>
               </tr>
               <% }); %>
             </tbody>
@@ -121,11 +160,48 @@
     </div>
   </body>
 
+  <div id="facture-info" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title has-text-centered">Informations Facture</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="table-container">
+          <table class="table mt-4">
+            <thead>
+              <tr>
+                <th>Statut</th>
+                <th>Auteur</th>
+                <th>Destinataire</th>
+                <th>Type</th>
+                <th>Montant</th>
+                <th>Contrat</th>
+                <th>Gagnant</th>
+                <th>Date & Heure</th>
+              </tr>
+            </thead>
+            <tbody id="facture-tbody">
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-primary close">Fermer</button>
+      </footer>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
+
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
+    const employes = [];
     const contrats = [];
     const gagnants = [];
 
+    <% employes.forEach(function(e) { %>
+    employes.push('<%= e.name %>');
+    <% }); %>
     <% contrats.forEach(function(c) { %>
     contrats.push('<%= c.name %>');
     <% }); %>
@@ -137,6 +213,50 @@
       $(".navbar-burger").click(function () {
         $(".navbar-burger").toggleClass("is-active");
         $(".navbar-menu").toggleClass("is-active");
+      });
+
+      $(".btn-info").click(function () {
+        const id = $(this).data("id");
+
+        $.ajax({
+          url: "/info-facture",
+          type: "POST",
+          data: { id: id },
+          success: function (data) {
+            data = data.facture;
+            if (!data || data == null) return;
+
+            if (data.extra) {
+              data.extra = JSON.parse(data.extra);
+              data.extra.forEach((extra) => {
+                const extraRow = $("<tr></tr>");
+                extraRow.append($("<td></td>").text(extra.statut));
+                extraRow.append($("<td></td>").text(extra.auteur ? extra.auteur.replace(/_.*/, '') : "Inconnu"));
+                extraRow.append($("<td></td>").text(extra.name));
+                extraRow.append($("<td></td>").text(extra.type));
+                extraRow.append($("<td></td>").text(extra.montant));
+                extraRow.append($("<td></td>").text(extra.contrat ? extra.contrat : "Aucun"));
+                extraRow.append($("<td></td>").text(extra.gagnant ? extra.gagnant : "Aucun"));
+                extraRow.append($("<td></td>").text(extra.date));
+                $("#facture-tbody").append(extraRow);
+              });
+            } else {
+              $("#statut").text("Original");
+              $("#auteur").text(data.auteur ? data.auteur.replace(/_.*/, '') : "Inconnu");
+              $("#destinataire").text(data.name);
+              $("#type").text(data.type);
+              $("#montant").text(data.montant);
+              $("#contrat").text(data.contrat ? data.contrat : "Aucun");
+              $("#gagnant").text(data.gagnant ? data.gagnant : "Aucun");
+              $("#date").text(data.date);
+            }
+            return $("#facture-info").addClass("is-active");
+          },
+        });
+      });
+
+      $(".modal-close, .modal-background, .close").click(function () {
+        $("#facture-info").removeClass("is-active");
       });
     });
   </script>

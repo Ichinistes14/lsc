@@ -77,10 +77,7 @@ if (btnAddFacture) {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          document.getElementById("f").reset();
-          bootstrap.Modal.getInstance(
-            document.getElementById("addFacture")
-          ).hide();
+          window.location.reload();
         } else {
           appendAlert(
             "Une erreur est survenu lors de l'ajout de la facture",

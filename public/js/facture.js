@@ -34,7 +34,19 @@ function makeEditable(row) {
   const _5 = cells[4].textContent; // Gagnant
   const _6 = cells[5].textContent;
 
-  cells[0].innerHTML = `<input type="text" class="input" value="${_1}" disabled />`;
+  let selectHTML0 = `<div class="select"><select>`;
+
+  employes.forEach((employe) => {
+    if (employe === _1) {
+      selectHTML0 += `<option value="${employe}" selected>${employe}</option>`;
+    }
+    else {
+      selectHTML0 += `<option value="${employe}">${employe}</option>`;
+    }
+  });
+  selectHTML0 += `</select></div>`;
+
+  cells[0].innerHTML = selectHTML0;
   cells[1].innerHTML = `<div class="select"><select id="type" aria-label="Choisir le type" >
                   <option value="Réparation" selected>Réparation</option>
                   <option value="Bidon">Bidon</option>
@@ -73,7 +85,7 @@ function makeEditable(row) {
 
   row.querySelector(".btn-save").addEventListener("click", function () {
     row.classList.remove("editing");
-    const __1 = cells[0].querySelector("input").value;
+    const __1 = cells[0].querySelector("select").value;
     const __2 = cells[1].querySelector("select").value;
     const __3 = cells[2].querySelector("input").value;
     const __4 = cells[3].querySelector("select").value;
@@ -98,15 +110,7 @@ function makeEditable(row) {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.success) {
-          cells[0].textContent = __1;
-          cells[1].textContent = __2;
-          cells[2].textContent = __3;
-          cells[3].textContent = __4;
-          cells[4].textContent = __5;
-          cells[5].textContent = __6;
-          cells[6].innerHTML = `<button id="btn-del" class="button is-danger" style="border-radius: 50%;" data-id="${id}"><span class="icon is-small"><i class="fa-solid fa-xmark"></i></span></button>`;
-        }
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
@@ -114,8 +118,9 @@ function makeEditable(row) {
   });
 }
 
-document.querySelectorAll("tbody tr").forEach((row) => {
-  row.addEventListener("dblclick", function () {
+document.querySelectorAll(".btn-modify").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    const row = e.target.closest("tr");
     makeEditable(row);
   });
 });
