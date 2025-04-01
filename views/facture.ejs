@@ -226,6 +226,8 @@
             data = data.facture;
             if (!data || data == null) return;
 
+            $("#facture-tbody").empty();
+
             if (data.extra && data.extra != null) {
               data.extra = JSON.parse(data.extra);
               data.extra.forEach((extra) => {
