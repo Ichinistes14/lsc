@@ -226,7 +226,7 @@
             data = data.facture;
             if (!data || data == null) return;
 
-            if (data.extra) {
+            if (data.extra && data.extra != null) {
               data.extra = JSON.parse(data.extra);
               data.extra.forEach((extra) => {
                 const extraRow = $("<tr></tr>");
@@ -249,6 +249,7 @@
               $("#contrat").text(data.contrat ? data.contrat : "Aucun");
               $("#gagnant").text(data.gagnant ? data.gagnant : "Aucun");
               $("#date").text(data.date);
+              $("#facture-tbody").append(extraRow);
             }
             return $("#facture-info").addClass("is-active");
           },
