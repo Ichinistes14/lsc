@@ -35,13 +35,13 @@ const gestionRouter = require("./router/gestion.routes");
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, "public")), {
+app.use(express.static(path.join(__dirname, "public"), {
   setHeaders: (res, filePath) => {
     if (/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/.test(filePath)) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
   }
-});
+}));
 app.use(express.json());
 app.use(
   cookieParser(
