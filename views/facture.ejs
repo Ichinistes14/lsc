@@ -242,14 +242,14 @@
               });
             } else {
               const extraRow = $("<tr></tr>");
-                extraRow.append($("<td></td>").text(extra.statut));
-                extraRow.append($("<td></td>").text(extra.auteur ? extra.auteur.replace(/_.*/, '') : "Inconnu"));
-                extraRow.append($("<td></td>").text(extra.name));
-                extraRow.append($("<td></td>").text(extra.type));
-                extraRow.append($("<td></td>").text(extra.montant));
-                extraRow.append($("<td></td>").text(extra.contrat ? extra.contrat : "Aucun"));
-                extraRow.append($("<td></td>").text(extra.gagnant ? extra.gagnant : "Aucun"));
-                extraRow.append($("<td></td>").text(extra.date));
+                extraRow.append($("<td></td>").text(data.statut));
+                extraRow.append($("<td></td>").text(data.auteur ? data.auteur.replace(/_.*/, '') : "Inconnu"));
+                extraRow.append($("<td></td>").text(data.name));
+                extraRow.append($("<td></td>").text(data.type));
+                extraRow.append($("<td></td>").text(data.montant));
+                extraRow.append($("<td></td>").text(data.contrat ? data.contrat : "Aucun"));
+                extraRow.append($("<td></td>").text(data.gagnant ? data.gagnant : "Aucun"));
+                extraRow.append($("<td></td>").text(data.date));
               $("#facture-tbody").append(extraRow);
             }
             return $("#facture-info").addClass("is-active");
