@@ -241,14 +241,15 @@
                 $("#facture-tbody").append(extraRow);
               });
             } else {
-              $("#statut").text("Original");
-              $("#auteur").text(data.auteur ? data.auteur.replace(/_.*/, '') : "Inconnu");
-              $("#destinataire").text(data.name);
-              $("#type").text(data.type);
-              $("#montant").text(data.montant);
-              $("#contrat").text(data.contrat ? data.contrat : "Aucun");
-              $("#gagnant").text(data.gagnant ? data.gagnant : "Aucun");
-              $("#date").text(data.date);
+              const extraRow = $("<tr></tr>");
+                extraRow.append($("<td></td>").text(extra.statut));
+                extraRow.append($("<td></td>").text(extra.auteur ? extra.auteur.replace(/_.*/, '') : "Inconnu"));
+                extraRow.append($("<td></td>").text(extra.name));
+                extraRow.append($("<td></td>").text(extra.type));
+                extraRow.append($("<td></td>").text(extra.montant));
+                extraRow.append($("<td></td>").text(extra.contrat ? extra.contrat : "Aucun"));
+                extraRow.append($("<td></td>").text(extra.gagnant ? extra.gagnant : "Aucun"));
+                extraRow.append($("<td></td>").text(extra.date));
               $("#facture-tbody").append(extraRow);
             }
             return $("#facture-info").addClass("is-active");
